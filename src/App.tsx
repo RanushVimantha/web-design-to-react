@@ -6,7 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Login from "./pages/Login";  // new login page
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 const queryClient = new QueryClient();
 
@@ -15,12 +16,13 @@ const App = () => (
     <TooltipProvider>
       <BrowserRouter>
         <Routes>
-          {/* your existing homepage */}
+          {/* Home page */}
           <Route path="/" element={<Index />} />
-          {/* new login route */}
+          {/* Authentication pages */}
           <Route path="/login" element={<Login />} />
-          {/* add other custom routes here */}
-          {/* fallback 404 page */}
+          <Route path="/register" element={<Register />} />
+          {/* Add other custom routes here */}
+          {/* 404 fallback */}
           <Route path="*" element={<NotFound />} />
         </Routes>
         {/* global notifications */}

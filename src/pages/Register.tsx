@@ -5,15 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Register = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: replace this with your real authentication logic
-    console.log("Logging in:", { email, password });
+    // TODO: send data to your registration API
+    console.log("Registering:", { name, email, password });
     // navigate("/dashboard") on success, for example
   };
 
@@ -22,11 +23,22 @@ const Login = () => {
       <Card className="w-full max-w-md bg-neutral-900 text-white">
         <CardHeader>
           <CardTitle className="text-center text-2xl">
-            Sign in to Ascendium
+            Create Account
           </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="John Doe"
+                className="bg-neutral-800 text-white focus-visible:ring-0"
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -55,15 +67,15 @@ const Login = () => {
               type="submit"
               className="w-full bg-red-500 hover:bg-red-600 transition-colors"
             >
-              Login
+              Register
             </Button>
             <p className="text-sm text-gray-400 text-center">
-              Don’t have an account?{" "}
+              Already have an account?{" "}
               <Link
-                to="/register"
+                to="/login"
                 className="text-red-500 hover:underline focus:outline-none"
               >
-                Register
+                Sign in
               </Link>
             </p>
           </form>
@@ -73,4 +85,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -15,14 +15,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    // TODO: implement your authentication logic here
     console.log("Logging in:", { loginEmail, loginPassword });
-    // TODO: implement real login logic
   };
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
+    // TODO: implement your registration logic here
     console.log("Registering:", { name, registerEmail, registerPassword });
-    // TODO: implement real registration logic
   };
 
   if (!open) return null;
@@ -31,8 +31,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
       <div className="relative w-full max-w-md mx-4">
         <div className="form-container bg-[var(--dark-card)] p-8 md:p-12 relative flex flex-col justify-center border-2 border-[var(--dark-border)] rounded-lg">
+          {/* gradient overlay */}
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[var(--primary-red)]/20 via-transparent to-transparent opacity-50"></div>
           <div className="relative z-10">
+            {/* tabs */}
             <div className="flex mb-8 border-b-2 border-[var(--dark-border)]">
               <button
                 className={`tab-button flex-1 ${
@@ -51,6 +53,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
                 REGISTER
               </button>
             </div>
+            {/* heading */}
             <h2 className="text-3xl font-bold mb-2 text-white glitch-effect">
               {activeTab === "login" ? "ACCESS GRID" : "REGISTER"}
             </h2>
@@ -59,6 +62,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
                 ? "Welcome back, operative."
                 : "Join the ranks."}
             </p>
+            {/* login form */}
             {activeTab === "login" ? (
               <form onSubmit={handleLogin} className="space-y-6">
                 <div>
@@ -95,11 +99,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
                   type="submit"
                   className="w-full bg-[var(--primary-red)] text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-red-500/30 group relative overflow-hidden"
                 >
-                  <span className="absolute left-0 top-0 h-full w-0 bg-white/20 transition-all duration-300 ease-out group-hover:w-full" />
+                  <span className="absolute left-0 top-0 h-full w-0 bg-white/20 transition-all duration-300 ease-out group-hover:w-full"></span>
                   <span className="relative">AUTHENTICATE</span>
                 </button>
               </form>
             ) : (
+              /* registration form */
               <form onSubmit={handleRegister} className="space-y-6">
                 <div>
                   <input
@@ -138,13 +143,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
                   type="submit"
                   className="w-full bg-[var(--primary-red)] text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-red-500/30 group relative overflow-hidden"
                 >
-                  <span className="absolute left-0 top-0 h-full w-0 bg-white/20 transition-all duration-300 ease-out group-hover:w-full" />
+                  <span className="absolute left-0 top-0 h-full w-0 bg-white/20 transition-all duration-300 ease-out group-hover:w-full"></span>
                   <span className="relative">REGISTER</span>
                 </button>
               </form>
             )}
           </div>
         </div>
+        {/* close button */}
         <button
           onClick={onClose}
           className="absolute -top-4 -right-4 bg-[var(--dark-card)] h-10 w-10 rounded-full flex items-center justify-center text-white hover:bg-[var(--primary-red)] transition-colors border-2 border-[var(--dark-border)]"

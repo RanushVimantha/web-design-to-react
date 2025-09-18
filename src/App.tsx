@@ -19,18 +19,12 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <BrowserRouter>
-          {/* Header accepts callback to open modal */}
           <Header onAuthIconClick={() => setShowAuthModal(true)} />
           <Routes>
             <Route path="/" element={<Index />} />
-            {/* other routes can remain here */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-          {/* Pop-up modal for login/register */}
-          <AuthModal
-            open={showAuthModal}
-            onClose={() => setShowAuthModal(false)}
-          />
+          <AuthModal open={showAuthModal} onClose={() => setShowAuthModal(false)} />
           <Sonner />
           <Toaster />
         </BrowserRouter>

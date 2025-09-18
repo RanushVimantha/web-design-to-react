@@ -224,6 +224,107 @@
   }
 }
 
+/* === Ascendium Auth Modal Design === */
+:root {
+  /* Primary palette */
+  --primary-red: #ea2a2a;
+  --primary-blue: #3b82f6;
+  /* Dark theme surfaces */
+  --dark-bg: #111827;
+  --dark-card: #1f2937;
+  --dark-border: #374151;
+  /* Text colors */
+  --text-light: #f3f4f6;
+  --text-muted: #9ca3af;
+}
+
+/* Glitch effect for headings */
+@layer utilities {
+  .glitch-effect {
+    position: relative;
+    display: inline-block;
+    text-shadow:
+      0.05em 0 0 rgba(234, 42, 42, 0.75),
+      -0.025em -0.05em 0 rgba(59, 130, 246, 0.75),
+      0.025em 0.05em 0 rgba(234, 42, 42, 0.75);
+    animation: glitch 500ms infinite;
+  }
+  @keyframes glitch {
+    0%, 14% {
+      text-shadow: 0.05em 0 0 rgba(234, 42, 42, 0.75),
+        -0.05em -0.025em 0 rgba(59, 130, 246, 0.75),
+        -0.025em 0.05em 0 rgba(234, 42, 42, 0.75);
+    }
+    15%, 49% {
+      text-shadow: -0.05em -0.025em 0 rgba(234, 42, 42, 0.75),
+        0.025em 0.025em 0 rgba(59, 130, 246, 0.75),
+        -0.05em -0.05em 0 rgba(234, 42, 42, 0.75);
+    }
+    50%, 99% {
+      text-shadow: 0.025em 0.05em 0 rgba(234, 42, 42, 0.75),
+        0.05em 0 0 rgba(59, 130, 246, 0.75),
+        0 -0.05em 0 rgba(234, 42, 42, 0.75);
+    }
+    100% {
+      text-shadow: -0.025em 0 0 rgba(234, 42, 42, 0.75),
+        -0.025em -0.025em 0 rgba(59, 130, 246, 0.75),
+        -0.025em -0.05em 0 rgba(234, 42, 42, 0.75);
+    }
+  }
+
+  /* Form container with angled bottom edge */
+  .form-container {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%, 0 92%);
+  }
+
+  /* Input styling */
+  .form-input-field {
+    background-color: rgba(17, 24, 39, 0.8);
+    border: 1px solid var(--dark-border);
+    transition: all 0.3s;
+  }
+  .form-input-field::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+  }
+  .form-input-field:focus {
+    outline: none;
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 2px var(--primary-red),
+      0 0 0 4px var(--primary-blue);
+  }
+
+  /* Tab buttons */
+  .tab-button {
+    position: relative;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    font-weight: 700;
+  }
+  .tab-button.active {
+    color: var(--text-light);
+  }
+  .tab-button::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-red);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  .tab-button.active::after {
+    transform: scaleX(1);
+  }
+}
+
+
 /* Keyframe Animations */
 @keyframes aurora {
   0% { 

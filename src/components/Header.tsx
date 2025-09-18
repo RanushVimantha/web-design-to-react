@@ -1,11 +1,21 @@
 import { Search, User } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface HeaderProps {
   onAuthIconClick: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onAuthIconClick }) => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const links = [
     { label: "Home", to: "/" },
     { label: "Teams", to: "/teams" },
@@ -24,33 +34,26 @@ const Header: React.FC<HeaderProps> = ({ onAuthIconClick }) => {
           viewBox="0 0 48 48"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path
-            d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z"
-            fill="currentColor"
-          />
+          <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" fill="currentColor" />
         </svg>
         <h2 className="text-white text-2xl font-bold tracking-widest uppercase font-orbitron">
           Ascendium
         </h2>
       </div>
 
-      {/* Navigation */}
+      {/* Navigation links */}
       <nav className="hidden lg:flex flex-1 justify-center gap-10">
         {links.map(({ label, to }) => (
           <NavLink key={to} to={to} className="relative group text-lg font-medium tracking-wide">
             {({ isActive }) => (
               <>
-                {/* Text: neutral by default, red if active or on hover */}
                 <span
                   className={`transition-colors duration-300 ${
-                    isActive
-                      ? "text-red-500"
-                      : "text-white/80 group-hover:text-red-500"
+                    isActive ? "text-red-500" : "text-white/80 group-hover:text-red-500"
                   }`}
                 >
                   {label}
                 </span>
-                {/* Underline: red and always visible if active; cyan and only appears on hover if inactive */}
                 <span
                   className={`absolute left-0 -bottom-1 w-full h-0.5 transition-all duration-300 ${
                     isActive
@@ -64,17 +67,39 @@ const Header: React.FC<HeaderProps> = ({ onAuthIconClick }) => {
         ))}
       </nav>
 
-      {/* Search and User buttons */}
+      {/* Search and user (login vs dropdown) */}
       <div className="flex items-center gap-4">
         <button className="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white/5 text-white transition-all duration-300 hover:bg-red-500 hover:text-black border-2 border-transparent hover:border-red-700">
           <Search className="h-6 w-6" />
         </button>
-        <button
-          onClick={onAuthIconClick}
-          className="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white/5 text-white transition-all duration-300 hover:bg-cyan-400 hover:text-black border-2 border-transparent hover:border-cyan-600"
-        >
-          <User className="h-6 w-6" />
-        </button>
+        {user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white/5 text-white transition-all duration-300 hover:bg-cyan-400 hover:text-black border-2 border-transparent hover:border-cyan-600">
+                <User className="h-6 w-6" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuItem onSelect={() => navigate("/dashboard")}>Dashboard</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={() => {
+                  logout();
+                  navigate("/");
+                }}
+              >
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <button
+            onClick={onAuthIconClick}
+            className="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white/5 text-white transition-all duration-300 hover:bg-cyan-400 hover:text-black border-2 border-transparent hover:border-cyan-600"
+          >
+            <User className="h-6 w-6" />
+          </button>
+        )}
       </div>
     </header>
   );

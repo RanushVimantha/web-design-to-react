@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AuthModalProps {
   open: boolean;
@@ -12,17 +13,26 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
   const [name, setName] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
+  const { login, register } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: implement your authentication logic here
-    console.log("Logging in:", { loginEmail, loginPassword });
+    try {
+      await login(loginEmail, loginPassword);
+      onClose();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: implement your registration logic here
-    console.log("Registering:", { name, registerEmail, registerPassword });
+    try {
+      await register(name, registerEmail, registerPassword);
+      onClose();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   if (!open) return null;
@@ -31,38 +41,28 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
       <div className="relative w-full max-w-md mx-4">
         <div className="form-container bg-[var(--dark-card)] p-8 md:p-12 relative flex flex-col justify-center border-2 border-[var(--dark-border)] rounded-lg">
-          {/* gradient overlay */}
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[var(--primary-red)]/20 via-transparent to-transparent opacity-50"></div>
           <div className="relative z-10">
-            {/* tabs */}
             <div className="flex mb-8 border-b-2 border-[var(--dark-border)]">
               <button
-                className={`tab-button flex-1 ${
-                  activeTab === "login" ? "active" : ""
-                }`}
+                className={`tab-button flex-1 ${activeTab === "login" ? "active" : ""}`}
                 onClick={() => setActiveTab("login")}
               >
                 LOGIN
               </button>
               <button
-                className={`tab-button flex-1 ${
-                  activeTab === "register" ? "active" : ""
-                }`}
+                className={`tab-button flex-1 ${activeTab === "register" ? "active" : ""}`}
                 onClick={() => setActiveTab("register")}
               >
                 REGISTER
               </button>
             </div>
-            {/* heading */}
             <h2 className="text-3xl font-bold mb-2 text-white glitch-effect">
               {activeTab === "login" ? "ACCESS GRID" : "REGISTER"}
             </h2>
             <p className="text-[var(--text-muted)] mb-8">
-              {activeTab === "login"
-                ? "Welcome back, operative."
-                : "Join the ranks."}
+              {activeTab === "login" ? "Welcome back, operative." : "Join the ranks."}
             </p>
-            {/* login form */}
             {activeTab === "login" ? (
               <form onSubmit={handleLogin} className="space-y-6">
                 <div>
@@ -104,7 +104,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
                 </button>
               </form>
             ) : (
-              /* registration form */
               <form onSubmit={handleRegister} className="space-y-6">
                 <div>
                   <input
@@ -150,7 +149,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
             )}
           </div>
         </div>
-        {/* close button */}
         <button
           onClick={onClose}
           className="absolute -top-4 -right-4 bg-[var(--dark-card)] h-10 w-10 rounded-full flex items-center justify-center text-white hover:bg-[var(--primary-red)] transition-colors border-2 border-[var(--dark-border)]"
@@ -162,12 +160,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>

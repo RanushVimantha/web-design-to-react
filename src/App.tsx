@@ -9,6 +9,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
 import AuthModal from "./components/AuthModal";
+import Dashboard from "./pages/Dashboard";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -18,16 +20,19 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <BrowserRouter>
-          <Header onAuthIconClick={() => setShowAuthModal(true)} />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <AuthModal open={showAuthModal} onClose={() => setShowAuthModal(false)} />
-          <Sonner />
-          <Toaster />
-        </BrowserRouter>
+        <AuthProvider>
+          <BrowserRouter>
+            <Header onAuthIconClick={() => setShowAuthModal(true)} />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <AuthModal open={showAuthModal} onClose={() => setShowAuthModal(false)} />
+            <Sonner />
+            <Toaster />
+          </BrowserRouter>
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

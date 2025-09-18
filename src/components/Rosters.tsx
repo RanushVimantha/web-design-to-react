@@ -1,23 +1,20 @@
-import valorantTeam from '@/assets/valorant-team.jpg';
-import lolTeam from '@/assets/lol-team.jpg';
-import dota2Team from '@/assets/dota2-team.jpg';
 
 const Rosters = () => {
   const rosters = [
     {
       game: "Valorant",
       description: "Precision, Strategy, and Unrelenting Domination.",
-      image: valorantTeam
+      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuALeeWoWxdDJD2qoBvnPfTFNw5idvWcFy-81defjK8evhwzrQ3Fup9iq4q28vSGGzb-wU9q0Zke2HcL3mcTT9SWaPFvsHkpSlJPJTcMGOqiIDB1UVFjQAobFinqKvLazK3JYRwUxab0MjW1GN0tSzRRQxJGllxr9D9L1Q6YzpxwyCMX8KJwRehTier3uBzFOaVF2t86GoOFZjmsP_OFxfZtzd8qUpWdzZv6rsBLvHV87IumeKP2WhSty6i3aI8UdFy_Of8H8J0cIek"
     },
     {
       game: "League of Legends",
       description: "Masters of the Rift, rewriting the meta.",
-      image: lolTeam
+      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB9mggNuvci-ij8dqfishuGwQKG0Q1C6Y7_f9FnLxodSURbC3yWPRXQNFZ-mi1ANJ4pZrFH6eLOEEItB_y49Xh29Z16KhLWSbIMrYFx12Chz-88s34OxTvPCrq_4QJYk7x3EZ8Tf5e_KQMqBgyIFjoHLwmYeFoSO2HUhpe1Pem1HTdmXKecPuqWLzAtzfrDng5acfNco5P0TsBaIGAYiYIMogk4pc3U7ZKzNrlHqt0lguSOVFvmS--5GO_lIw0GnERY3Xz7TOSuOXc"
     },
     {
       game: "Dota 2",
       description: "Unpredictable strategies, undeniable results.",
-      image: dota2Team
+      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBqZ6-xagMFJeX6wWH1e3bwka5AdwxpJIZ9d4Re1k9Riqhhb1Lp4te6K7A2-ePCqEVaGUoDluiuj8ZZhpFH2dB18-spm0u1fLFth2jslaP4DGjYDhEsXZ6Gheq5KFeIN5EPzxAW8FnAe8JzV2j17tNSWzuPQjO0Zk6QDMAodbXAYv5c6b9X-3i9HzRkjn2F4LkXtwiTTXtHNqeKdfBFlvA47NkPJ5tBhlzMmNxrhWYeyTx8nRKjilSVolu6rdjqoM8sL3qGYM81cPc"
     }
   ];
 

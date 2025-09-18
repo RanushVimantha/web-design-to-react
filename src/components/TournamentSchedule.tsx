@@ -30,7 +30,7 @@ const TournamentSchedule = () => {
           Battle <span className="text-shadow-red text-red-500">Schedule</span>
         </h2>
         
-        <div className="overflow-hidden rounded-lg border border-white/10 glass-card">
+        <div className="overflow-hidden rounded-lg border border-white/10 backdrop-blur-sm bg-white/5">
           <table className="w-full text-left">
             <thead className="bg-white/5">
               <tr>

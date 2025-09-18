@@ -170,20 +170,27 @@
 
   .partner-logo-container::before {
     content: '';
-    @apply absolute inset-0 rounded-lg p-0.5 opacity-0 transition-all duration-300;
-    background: linear-gradient(45deg, hsl(var(--primary) / 0), hsl(var(--accent) / 0));
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: xor;
+    position: absolute;
+    inset: 0;
+    border-radius: 0.5rem;
+    padding: 2px;
+    background: linear-gradient(45deg, rgba(255, 0, 0, 0), rgba(0, 255, 255, 0));
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
   }
 
   .partner-logo-container:hover::before {
-    @apply opacity-100;
-    background: linear-gradient(45deg, hsl(var(--primary) / 0.5), hsl(var(--accent) / 0.5));
+    background: linear-gradient(45deg, rgba(255, 0, 0, 0.5), rgba(0, 255, 255, 0.5));
   }
 
   /* Footer Glow */
   .footer-glow {
-    box-shadow: 0 -10px 30px -15px hsl(var(--primary) / 0.3), 0 -10px 30px -15px hsl(var(--accent) / 0.3);
+    box-shadow: 0 -10px 30px -15px rgba(255, 0, 0, 0.3), 0 -10px 30px -15px rgba(0, 255, 255, 0.3);
   }
 
   /* Navigation Link Effects */

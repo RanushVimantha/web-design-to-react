@@ -1,4 +1,3 @@
-import { ArrowRight } from 'lucide-react';
 
 const Footer = () => {
   const navigationLinks = [
@@ -91,7 +90,9 @@ const Footer = () => {
                   type="email"
                 />
                 <button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold px-4 py-2 rounded-r-md transition-all duration-300 transform hover:scale-105">
-                  <ArrowRight />
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                  </svg>
                 </button>
               </form>
             </div>

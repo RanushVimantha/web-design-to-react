@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        'orbitron': ['Orbitron', 'sans-serif'],
+        'space-grotesk': ['Space Grotesk', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -80,10 +84,34 @@ export default {
             height: "0",
           },
         },
+        "aurora": {
+          "0%": { 
+            transform: "translate(-20%, -20%) rotate(0deg)", 
+            opacity: "0.3" 
+          },
+          "50%": { 
+            transform: "translate(20%, 20%) rotate(180deg)", 
+            opacity: "0.6" 
+          },
+          "100%": { 
+            transform: "translate(-20%, -20%) rotate(360deg)", 
+            opacity: "0.3" 
+          }
+        },
+        "levitate": {
+          "0%, 100%": {
+            transform: "translateY(0)"
+          },
+          "50%": {
+            transform: "translateY(-20px)"
+          }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "aurora": "aurora 10s infinite alternate",
+        "levitate": "levitate 5s ease-in-out infinite",
       },
     },
   },

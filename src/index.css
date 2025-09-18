@@ -2,95 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Ascendium E-Sports Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base Colors - Gaming/Cyberpunk Theme */
+    --background: 0 0% 0%;  /* Pure black */
+    --foreground: 0 0% 100%;  /* Pure white */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Gaming Primary Colors */
+    --primary: 0 100% 50%;  /* Pure red for gaming */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 180 100% 50%;  /* Pure cyan for gaming */
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 10%;  /* Dark gray */
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 180 100% 50%;  /* Cyan accent */
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 0 0% 100% / 0.1;  /* White with 10% opacity */
+    --input: 0 0% 100% / 0.05;  /* White with 5% opacity */
+    --ring: 0 100% 50%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Gaming-specific colors */
+    --neon-red: 0 100% 50%;
+    --neon-cyan: 180 100% 50%;
+    --glass-bg: 0 0% 100% / 0.05;
+    --glass-border: 0 0% 100% / 0.1;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Gradients */
+    --gradient-aurora: linear-gradient(45deg, hsl(0 100% 50% / 0.5), transparent, hsl(180 100% 50% / 0.5));
+    --gradient-hero: linear-gradient(135deg, hsl(0 100% 50% / 0.1), transparent, hsl(180 100% 50% / 0.1));
+    --gradient-card: linear-gradient(135deg, hsl(0 100% 50% / 0.1), transparent);
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Shadows and Glows */
+    --shadow-red: 0 0 15px hsl(0 100% 50% / 0.8), 0 0 25px hsl(0 100% 50% / 0.6);
+    --shadow-cyan: 0 0 15px hsl(180 100% 50% / 0.8), 0 0 25px hsl(180 100% 50% / 0.6);
+    --glow-red: 0 0 20px hsl(0 100% 50%);
+    --glow-cyan: 0 0 20px hsl(180 100% 50%);
 
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar colors */
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 100% / 0.1;
+    --sidebar-ring: 0 100% 50%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* In this design, we're already dark by default */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
   }
 }
 
@@ -100,6 +79,165 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-space-grotesk;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-orbitron;
+  }
+}
+
+@layer utilities {
+  /* Gaming Text Effects */
+  .text-shadow-red {
+    text-shadow: var(--shadow-red);
+  }
+  
+  .text-shadow-cyan {
+    text-shadow: var(--shadow-cyan);
+  }
+
+  /* Custom Animations */
+  .animate-aurora {
+    animation: aurora 10s infinite alternate;
+  }
+
+  .animate-levitate {
+    animation: levitate 5s ease-in-out infinite;
+  }
+
+  /* Clip Path Effects */
+  .clip-path-polygon {
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 85% 100%, 0 100%, 0% 50%);
+  }
+
+  /* Glass Morphism */
+  .glass-bg {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(10px);
+    border: 1px solid hsl(var(--glass-border));
+  }
+
+  .glass-card {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--glass-border));
+  }
+
+  /* Gaming Button Effects */
+  .btn-gaming-red {
+    @apply relative overflow-hidden border-2 border-red-500 bg-transparent text-white transition-all duration-300;
+    @apply hover:shadow-[0_0_20px_hsl(var(--primary))];
+  }
+
+  .btn-gaming-red::before {
+    content: '';
+    @apply absolute inset-0 bg-red-500 transition-all duration-300 ease-out;
+    transform: translateX(-100%);
+  }
+
+  .btn-gaming-red:hover::before {
+    transform: translateX(0);
+  }
+
+  .btn-gaming-red span {
+    @apply relative z-10;
+  }
+
+  .btn-gaming-cyan {
+    @apply relative overflow-hidden border-2 border-cyan-400 bg-transparent text-white transition-all duration-300;
+    @apply hover:shadow-[0_0_20px_hsl(var(--accent))];
+  }
+
+  .btn-gaming-cyan::before {
+    content: '';
+    @apply absolute inset-0 bg-cyan-400 transition-all duration-300 ease-out;
+    transform: translateX(100%);
+  }
+
+  .btn-gaming-cyan:hover::before {
+    transform: translateX(0);
+  }
+
+  .btn-gaming-cyan span {
+    @apply relative z-10;
+  }
+
+  /* Partner Logo Effects */
+  .partner-logo-container {
+    @apply relative;
+  }
+
+  .partner-logo-container::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg p-0.5 opacity-0 transition-all duration-300;
+    background: linear-gradient(45deg, hsl(var(--primary) / 0), hsl(var(--accent) / 0));
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+  }
+
+  .partner-logo-container:hover::before {
+    @apply opacity-100;
+    background: linear-gradient(45deg, hsl(var(--primary) / 0.5), hsl(var(--accent) / 0.5));
+  }
+
+  /* Footer Glow */
+  .footer-glow {
+    box-shadow: 0 -10px 30px -15px hsl(var(--primary) / 0.3), 0 -10px 30px -15px hsl(var(--accent) / 0.3);
+  }
+
+  /* Navigation Link Effects */
+  .nav-link {
+    @apply relative text-white/80 transition-all duration-300 text-lg font-medium tracking-wider;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute left-0 -bottom-1 w-full h-0.5 transform scale-x-0 transition-transform duration-300;
+  }
+
+  .nav-link-red::after {
+    @apply bg-red-500;
+  }
+
+  .nav-link-cyan::after {
+    @apply bg-cyan-400;
+  }
+
+  .nav-link:hover::after {
+    transform: scaleX(1);
+  }
+
+  .nav-link-red:hover {
+    @apply text-red-500;
+  }
+
+  .nav-link-cyan:hover {
+    @apply text-cyan-400;
+  }
+}
+
+/* Keyframe Animations */
+@keyframes aurora {
+  0% { 
+    transform: translate(-20%, -20%) rotate(0deg); 
+    opacity: 0.3; 
+  }
+  50% { 
+    transform: translate(20%, 20%) rotate(180deg); 
+    opacity: 0.6; 
+  }
+  100% { 
+    transform: translate(-20%, -20%) rotate(360deg); 
+    opacity: 0.3; 
+  }
+}
+
+@keyframes levitate {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
   }
 }

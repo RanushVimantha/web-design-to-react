@@ -1,12 +1,15 @@
 import { Search, User } from "lucide-react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-const Header = () => {
+interface HeaderProps {
+  onAuthIconClick: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onAuthIconClick }) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/50 backdrop-blur-xl">
       {/* Logo and brand */}
       <div className="flex items-center gap-4 text-white">
-        {/* Inline SVG icon from your original header */}
         <svg
           className="h-10 w-10 text-red-500"
           fill="none"
@@ -43,17 +46,18 @@ const Header = () => {
         ))}
       </nav>
 
-      {/* Search and user icons */}
+      {/* Search and auth icons */}
       <div className="flex items-center gap-4">
         <button className="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white/5 text-white transition-all duration-300 hover:bg-red-500 hover:text-black border-2 border-transparent hover:border-red-700">
           <Search className="h-6 w-6" />
         </button>
-        <Link
-          to="/login"
+        {/* Trigger modal */}
+        <button
+          onClick={onAuthIconClick}
           className="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white/5 text-white transition-all duration-300 hover:bg-cyan-400 hover:text-black border-2 border-transparent hover:border-cyan-600"
         >
           <User className="h-6 w-6" />
-        </Link>
+        </button>
       </div>
     </header>
   );

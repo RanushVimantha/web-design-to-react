@@ -8,6 +8,13 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import Teams from "./pages/Teams";
+import TeamDetail from "./pages/TeamDetail";
+import Tournaments from "./pages/Tournaments";
+import Partners from "./pages/Partners";
+import Contact from "./pages/Contact";
+import Recruit from "./pages/Recruit";
+import PlayerProfile from "./pages/PlayerProfile";
 import Header from "./components/Header";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 
@@ -29,6 +36,13 @@ const App = () => {
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthRedirect />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/teams" element={<Teams />} />
+              <Route path="/teams/:id" element={<TeamDetail />} />
+              <Route path="/players/:id" element={<PlayerProfile />} />
+              <Route path="/tournaments" element={<Tournaments />} />
+              <Route path="/partners" element={<Partners />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/recruit" element={<Recruit />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Sonner />

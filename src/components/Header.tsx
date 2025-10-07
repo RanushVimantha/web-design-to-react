@@ -14,14 +14,14 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onAuthIconClick }) => {
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const links = [
     { label: "Home", to: "/" },
     { label: "Teams", to: "/teams" },
-    { label: "Recruitment", to: "/recruitment" },
     { label: "Tournaments", to: "/tournaments" },
-    { label: "Community", to: "/community" },
+    { label: "Partners", to: "/partners" },
+    { label: "Contact", to: "/contact" },
   ];
 
   return (
@@ -83,8 +83,8 @@ const Header: React.FC<HeaderProps> = ({ onAuthIconClick }) => {
               <DropdownMenuItem onSelect={() => navigate("/dashboard")}>Dashboard</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onSelect={() => {
-                  logout();
+                onSelect={async () => {
+                  await signOut();
                   navigate("/");
                 }}
               >

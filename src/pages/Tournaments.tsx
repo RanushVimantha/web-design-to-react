@@ -59,76 +59,178 @@ const Tournaments = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pt-24 pb-12 px-4">
-      <div className="container mx-auto max-w-6xl">
-        <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Tournaments</h1>
-          <p className="text-muted-foreground text-lg">
-            Follow our journey through competitive gaming
+    <div className="min-h-screen bg-black flex flex-col">
+      <div className="relative pt-48 pb-32 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)' }}>
+        <div className="px-10 flex flex-col items-center text-center">
+          <h1 className="text-white text-8xl font-bold leading-tight tracking-tighter max-w-4xl uppercase drop-shadow-[0_0_10px_rgb(255,0,0)]">
+            Tournament Hub
+          </h1>
+          <p className="text-white/70 text-2xl mt-6 max-w-3xl font-light">
+            Where Legends Are Forged and Champions Rise.
           </p>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 gap-6">
-          {tournaments.map((tournament) => (
-            <Card key={tournament.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="md:flex">
-                {tournament.banner_url && (
-                  <div className="md:w-1/3 h-48 md:h-auto">
-                    <img
-                      src={tournament.banner_url}
-                      alt={tournament.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-                <div className="md:flex-1">
-                  <CardHeader>
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <CardTitle className="text-2xl mb-2">{tournament.name}</CardTitle>
-                        <div className="flex flex-wrap gap-2">
-                          <Badge variant="secondary">{tournament.game}</Badge>
-                          <Badge variant={getStatusColor(tournament.status)}>
-                            {tournament.status || "upcoming"}
-                          </Badge>
+      <div className="px-10 w-full mx-auto py-20">
+        <div className="flex flex-col gap-16">
+          <div>
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-4xl font-bold text-white">
+                <span className="text-cyan-400 drop-shadow-[0_0_10px_rgb(0,191,255)]">UPCOMING</span> TOURNAMENTS
+              </h2>
+              <Badge className="bg-cyan-400/20 text-cyan-400 border-cyan-400/50 px-4 py-2 text-lg">
+                {tournaments.filter(t => t.status === 'upcoming').length} Events
+              </Badge>
+            </div>
+
+            <div className="space-y-6">
+              {tournaments.filter(t => t.status === 'upcoming').map((tournament) => (
+                <div
+                  key={tournament.id}
+                  className="tournament-list-item group relative rounded-lg p-6 cursor-pointer"
+                >
+                  <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
+                    {tournament.banner_url && (
+                      <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden flex-shrink-0">
+                        <img
+                          src={tournament.banner_url}
+                          alt={tournament.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    
+                    <div className="flex-1 space-y-3">
+                      <div className="flex items-start justify-between gap-4">
+                        <h3 className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+                          {tournament.name}
+                        </h3>
+                        <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
+                          {tournament.status || "upcoming"}
+                        </Badge>
+                      </div>
+                      
+                      <p className="text-gray-400 text-sm">{tournament.description || "Competitive tournament"}</p>
+                      
+                      <div className="flex flex-wrap gap-6 text-sm">
+                        <div className="flex items-center gap-2 text-gray-400">
+                          <Calendar className="h-4 w-4" />
+                          <span>
+                            {format(new Date(tournament.start_date), "MMM dd, yyyy")}
+                            {tournament.end_date &&
+                              ` - ${format(new Date(tournament.end_date), "MMM dd, yyyy")}`}
+                          </span>
                         </div>
+                        
+                        {tournament.prize_pool && (
+                          <div className="flex items-center gap-2 text-cyan-400 font-bold">
+                            <Trophy className="h-4 w-4" />
+                            <span>${tournament.prize_pool.toLocaleString()}</span>
+                          </div>
+                        )}
+                        
+                        <Badge className="bg-red-500/20 text-red-400 border-red-500/50">
+                          {tournament.game}
+                        </Badge>
                       </div>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    {tournament.description && (
-                      <CardDescription className="mb-4">{tournament.description}</CardDescription>
-                    )}
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Calendar className="h-4 w-4" />
-                        <span>
-                          {format(new Date(tournament.start_date), "MMM dd, yyyy")}
-                          {tournament.end_date &&
-                            ` - ${format(new Date(tournament.end_date), "MMM dd, yyyy")}`}
-                        </span>
-                      </div>
-                      {tournament.prize_pool && (
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <DollarSign className="h-4 w-4" />
-                          <span>Prize Pool: ${tournament.prize_pool.toLocaleString()}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {tournaments.filter(t => t.status === 'completed').length > 0 && (
+            <div>
+              <h2 className="text-4xl font-bold text-white mb-8">
+                <span className="text-red-500 drop-shadow-[0_0_10px_rgb(255,0,0)]">PAST</span> TOURNAMENTS
+              </h2>
+
+              <div className="space-y-6">
+                {tournaments.filter(t => t.status === 'completed').map((tournament) => (
+                  <div
+                    key={tournament.id}
+                    className="tournament-list-item group relative rounded-lg p-6 opacity-60 hover:opacity-100 transition-opacity"
+                  >
+                    <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
+                      {tournament.banner_url && (
+                        <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden flex-shrink-0">
+                          <img
+                            src={tournament.banner_url}
+                            alt={tournament.name}
+                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all"
+                          />
                         </div>
                       )}
+                      
+                      <div className="flex-1 space-y-3">
+                        <div className="flex items-start justify-between gap-4">
+                          <h3 className="text-2xl font-bold text-white">{tournament.name}</h3>
+                          <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/50">
+                            Completed
+                          </Badge>
+                        </div>
+                        
+                        <p className="text-gray-400 text-sm">{tournament.description || "Past tournament"}</p>
+                        
+                        <div className="flex flex-wrap gap-6 text-sm">
+                          <div className="flex items-center gap-2 text-gray-400">
+                            <Calendar className="h-4 w-4" />
+                            <span>
+                              {format(new Date(tournament.start_date), "MMM dd, yyyy")}
+                            </span>
+                          </div>
+                          
+                          {tournament.prize_pool && (
+                            <div className="flex items-center gap-2 text-gray-400">
+                              <Trophy className="h-4 w-4" />
+                              <span>${tournament.prize_pool.toLocaleString()}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </CardContent>
-                </div>
+                  </div>
+                ))}
               </div>
-            </Card>
-          ))}
+            </div>
+          )}
         </div>
 
         {tournaments.length === 0 && (
           <div className="text-center py-12">
-            <Trophy className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-muted-foreground text-lg">No tournaments yet. Check back soon!</p>
+            <Trophy className="h-16 w-16 mx-auto mb-4 text-gray-600" />
+            <p className="text-gray-400 text-lg">No tournaments yet. Check back soon!</p>
           </div>
         )}
       </div>
+
+      <style>{`
+        .tournament-list-item {
+          background: linear-gradient(90deg, rgba(10, 10, 10, 0.8), #0a0a0a);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+        .tournament-list-item:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgb(0, 191, 255), transparent);
+          transition: left 0.5s ease;
+        }
+        .tournament-list-item:hover:before {
+          left: 100%;
+        }
+        .tournament-list-item:hover {
+          transform: scale(1.02);
+          box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
+        }
+      `}</style>
     </div>
   );
 };

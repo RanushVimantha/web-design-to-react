@@ -42,62 +42,137 @@ const Partners = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pt-24 pb-12 px-4">
-      <div className="container mx-auto max-w-6xl">
-        <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Partners</h1>
-          <p className="text-muted-foreground text-lg">
-            Proud to work with industry-leading brands
+    <div className="min-h-screen bg-black pt-24 pb-12 px-4 sm:px-6 lg:px-24">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-cyan-400 drop-shadow-[0_0_8px_rgba(234,42,51,0.5)]">
+            Our Partners & Sponsors
+          </h1>
+          <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+            We are proud to collaborate with industry leaders and innovators who share our passion for esports and community.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {partners.map((partner) => (
-            <Card key={partner.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold tracking-tight mb-8 relative inline-block text-white">
+            <span className="relative z-10">Premium Partners</span>
+            <span className="absolute -bottom-2 left-0 h-1 w-full bg-red-500"></span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {partners.filter(p => p.partner_type === 'premium').map((partner) => (
+              <div
+                key={partner.id}
+                className="relative bg-gray-900/50 backdrop-blur-sm rounded-lg overflow-hidden group transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/20 border border-white/10"
+              >
+                <div className="absolute inset-0 bg-gradient-radial opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
                 {partner.logo_url && (
-                  <div className="h-32 flex items-center justify-center mb-4 bg-muted rounded-lg p-4">
-                    <img
-                      src={partner.logo_url}
-                      alt={partner.name}
-                      className="max-h-full max-w-full object-contain"
-                    />
+                  <div className="w-full h-48 bg-center bg-no-repeat bg-cover" style={{ backgroundImage: `url(${partner.logo_url})` }}></div>
+                )}
+                <div className="p-6 relative">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-xl font-bold text-white">{partner.name}</h3>
+                    {partner.website_url && (
+                      <a
+                        href={partner.website_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-red-500 hover:text-red-400 transition-colors"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                      </a>
+                    )}
                   </div>
+                  <p className="text-gray-400 text-sm">{partner.description || "Official partner"}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold tracking-tight mb-8 relative inline-block text-white">
+            <span className="relative z-10">Official Sponsors</span>
+            <span className="absolute -bottom-2 left-0 h-1 w-full bg-cyan-400"></span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {partners.filter(p => p.partner_type === 'sponsor').map((partner) => (
+              <div
+                key={partner.id}
+                className="relative bg-gray-900/50 backdrop-blur-sm rounded-lg overflow-hidden group transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-400/20 border border-white/10"
+              >
+                <div className="absolute inset-0 bg-gradient-radial opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+                {partner.logo_url && (
+                  <div className="w-full h-48 bg-center bg-no-repeat bg-cover" style={{ backgroundImage: `url(${partner.logo_url})` }}></div>
                 )}
-                <CardTitle className="flex items-center justify-between">
-                  {partner.name}
-                  {partner.website_url && (
-                    <a
-                      href={partner.website_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:text-primary/80"
-                    >
-                      <ExternalLink className="h-5 w-5" />
-                    </a>
-                  )}
-                </CardTitle>
-                {partner.partner_type && (
-                  <Badge variant="secondary" className="w-fit">
-                    {partner.partner_type}
-                  </Badge>
+                <div className="p-6 relative">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-xl font-bold text-white">{partner.name}</h3>
+                    {partner.website_url && (
+                      <a
+                        href={partner.website_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-cyan-400 hover:text-cyan-300 transition-colors"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                      </a>
+                    )}
+                  </div>
+                  <p className="text-gray-400 text-sm">{partner.description || "Official sponsor"}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight mb-8 relative inline-block text-white">
+            <span className="relative z-10">Community Supporters</span>
+            <span className="absolute -bottom-2 left-0 h-1 w-full bg-red-500"></span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {partners.filter(p => !p.partner_type || p.partner_type === 'community').map((partner) => (
+              <div
+                key={partner.id}
+                className="relative bg-gray-900/50 backdrop-blur-sm rounded-lg overflow-hidden group transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/20 border border-white/10"
+              >
+                <div className="absolute inset-0 bg-gradient-radial opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+                {partner.logo_url && (
+                  <div className="w-full h-48 bg-center bg-no-repeat bg-cover" style={{ backgroundImage: `url(${partner.logo_url})` }}></div>
                 )}
-              </CardHeader>
-              {partner.description && (
-                <CardContent>
-                  <CardDescription>{partner.description}</CardDescription>
-                </CardContent>
-              )}
-            </Card>
-          ))}
+                <div className="p-6 relative">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-xl font-bold text-white">{partner.name}</h3>
+                    {partner.website_url && (
+                      <a
+                        href={partner.website_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-red-500 hover:text-red-400 transition-colors"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                      </a>
+                    )}
+                  </div>
+                  <p className="text-gray-400 text-sm">{partner.description || "Community supporter"}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {partners.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground text-lg">No partners yet. Check back soon!</p>
+            <p className="text-gray-400 text-lg">No partners yet. Check back soon!</p>
           </div>
         )}
       </div>
+
+      <style>{`
+        .bg-gradient-radial {
+          background-image: radial-gradient(circle at top left, rgba(234, 42, 51, 0.3) 0%, transparent 30%), radial-gradient(circle at bottom right, rgba(0, 178, 255, 0.3) 0%, transparent 30%);
+        }
+      `}</style>
     </div>
   );
 };

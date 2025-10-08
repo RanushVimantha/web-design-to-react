@@ -21,6 +21,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthIconClick }) => {
     { label: "Teams", to: "/teams" },
     { label: "Tournaments", to: "/tournaments" },
     { label: "Partners", to: "/partners" },
+    { label: "Recruit", to: "/recruit" },
     { label: "Contact", to: "/contact" },
   ];
 

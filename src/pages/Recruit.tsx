@@ -16,10 +16,11 @@ import { toast } from "sonner";
 import { Users, Trophy, Target } from "lucide-react";
 
 const positions = [
-  "Professional Player",
-  "Content Creator",
+  "Pro Player (Valorant)",
+  "Streamer / Content Creator",
+  "Team Analyst",
+  "Community Moderator",
   "Coach",
-  "Analyst",
   "Manager",
   "Social Media Manager",
   "Video Editor",
@@ -59,121 +60,166 @@ const Recruit = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pt-24 pb-12 px-4">
-      <div className="container mx-auto max-w-4xl">
-        <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Join Ascendium</h1>
-          <p className="text-muted-foreground text-lg">
-            Be part of our journey to competitive gaming excellence
+    <div className="relative min-h-screen bg-gradient-to-br from-black via-red-950/10 to-cyan-950/10 pt-24 pb-12 overflow-hidden">
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute -top-1/4 left-0 h-1/2 w-1/2 rounded-full bg-red-500/10 blur-[150px] animate-pulse"></div>
+        <div className="absolute -bottom-1/4 right-0 h-1/2 w-1/2 rounded-full bg-cyan-400/10 blur-[150px] animate-pulse [animation-delay:4s]"></div>
+      </div>
+
+      <div className="container mx-auto max-w-7xl px-4 sm:px-10 lg:px-20">
+        <div className="mb-16 text-center">
+          <h1 className="text-6xl font-bold tracking-tighter text-white drop-shadow-[0_0_15px_rgba(255,0,51,0.5)] mb-4">
+            BECOME LEGENDARY
+          </h1>
+          <p className="mx-auto max-w-3xl text-lg text-gray-300">
+            Ascendium is on the hunt for the next generation of esports talent. We're not just building a team, we're forging a legacy. If you have the drive, the skill, and the passion to compete at the highest level, your journey starts here.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardHeader className="text-center">
-              <Users className="h-10 w-10 mx-auto mb-2 text-primary" />
-              <CardTitle>Elite Team</CardTitle>
-              <CardDescription>Join world-class players and staff</CardDescription>
-            </CardHeader>
-          </Card>
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-5">
+          {/* Left side - Open Positions & Why Ascendium */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="rounded-xl bg-black/30 p-6 backdrop-blur-md border border-red-500/30 animate-pulse">
+              <h3 className="mb-4 text-3xl font-bold text-white">Open Positions</h3>
+              <div className="space-y-4">
+                {positions.slice(0, 4).map((position) => (
+                  <div
+                    key={position}
+                    className="flex items-center justify-between rounded-lg bg-gray-900/50 p-4 transition-all duration-300 hover:bg-gray-800/70 hover:shadow-[0_0_15px_rgb(239,68,68)]"
+                  >
+                    <div>
+                      <p className="font-semibold text-white">{position}</p>
+                      <p className="text-sm text-gray-400">
+                        {position.includes("Player") ? "Competitive Roster" : 
+                         position.includes("Streamer") ? "Brand Ambassador" :
+                         position.includes("Analyst") ? "Strategy & Performance" : "Discord & Socials"}
+                      </p>
+                    </div>
+                    <button className="flex h-10 items-center justify-center rounded-md bg-red-500 px-4 text-sm font-bold text-white transition-transform duration-300 hover:scale-105">
+                      Details
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-          <Card>
-            <CardHeader className="text-center">
-              <Trophy className="h-10 w-10 mx-auto mb-2 text-primary" />
-              <CardTitle>Competitive</CardTitle>
-              <CardDescription>Compete in major tournaments</CardDescription>
-            </CardHeader>
-          </Card>
+            <div className="rounded-xl bg-gradient-to-br from-red-500/80 to-cyan-400/80 p-6 text-center backdrop-blur-md">
+              <Users className="h-12 w-12 mx-auto mb-4 text-white" />
+              <h3 className="text-2xl font-bold text-white mb-3">Why Ascendium?</h3>
+              <p className="text-white/90">
+                Join a family dedicated to excellence. We provide top-tier resources, a supportive community, and the platform to elevate your career. We don't just play games; we define them.
+              </p>
+            </div>
+          </div>
 
-          <Card>
-            <CardHeader className="text-center">
-              <Target className="h-10 w-10 mx-auto mb-2 text-primary" />
-              <CardTitle>Growth</CardTitle>
-              <CardDescription>Professional development opportunities</CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Application Form</CardTitle>
-            <CardDescription>Tell us about yourself and why you want to join Ascendium</CardDescription>
-          </CardHeader>
-          <CardContent>
+          {/* Right side - Application Form */}
+          <div className="lg:col-span-3 rounded-xl bg-black/30 p-8 backdrop-blur-md border border-cyan-400/30 animate-pulse [animation-delay:0.5s]">
+            <h3 className="mb-6 text-3xl font-bold text-white text-center">Submit Your Application</h3>
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="fullName">Full Name *</Label>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div className="relative">
                   <Input
                     id="fullName"
-                    placeholder="John Doe"
+                    placeholder=" "
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     required
+                    className="peer w-full rounded-md border-2 border-gray-700 bg-transparent p-3 text-white placeholder-transparent transition-colors focus:border-cyan-400"
                   />
+                  <Label
+                    htmlFor="fullName"
+                    className="absolute left-3 -top-2.5 bg-black/30 px-1 text-sm text-gray-400 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-cyan-400"
+                  >
+                    Full Name
+                  </Label>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email *</Label>
+
+                <div className="relative">
                   <Input
                     id="email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder=" "
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
+                    className="peer w-full rounded-md border-2 border-gray-700 bg-transparent p-3 text-white placeholder-transparent transition-colors focus:border-cyan-400"
                   />
+                  <Label
+                    htmlFor="email"
+                    className="absolute left-3 -top-2.5 bg-black/30 px-1 text-sm text-gray-400 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-cyan-400"
+                  >
+                    Email Address
+                  </Label>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="position">Position *</Label>
+              <div className="relative">
                 <Select
                   value={formData.position}
                   onValueChange={(value) => setFormData({ ...formData, position: value })}
                   required
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a position" />
+                  <SelectTrigger className="w-full rounded-md border-2 border-gray-700 bg-transparent p-3 text-white transition-colors focus:border-cyan-400">
+                    <SelectValue placeholder="Select Position..." />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-black border-gray-700">
                     {positions.map((position) => (
-                      <SelectItem key={position} value={position}>
+                      <SelectItem key={position} value={position} className="text-white">
                         {position}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                <Label className="absolute left-3 -top-2.5 bg-black/30 px-1 text-sm text-cyan-400">
+                  Position Applying For
+                </Label>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="resumeUrl">Resume/Portfolio URL</Label>
+              <div className="relative">
                 <Input
                   id="resumeUrl"
                   type="url"
-                  placeholder="https://..."
+                  placeholder=" "
                   value={formData.resumeUrl}
                   onChange={(e) => setFormData({ ...formData, resumeUrl: e.target.value })}
+                  className="peer w-full rounded-md border-2 border-gray-700 bg-transparent p-3 text-white placeholder-transparent transition-colors focus:border-cyan-400"
                 />
+                <Label
+                  htmlFor="resumeUrl"
+                  className="absolute left-3 -top-2.5 bg-black/30 px-1 text-sm text-gray-400 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-cyan-400"
+                >
+                  Resume/Portfolio URL (Optional)
+                </Label>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="coverLetter">Cover Letter *</Label>
+              <div className="relative">
                 <Textarea
                   id="coverLetter"
-                  placeholder="Tell us about yourself, your experience, and why you want to join Ascendium..."
+                  placeholder=" "
                   rows={8}
                   value={formData.coverLetter}
                   onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
                   required
+                  className="peer w-full rounded-md border-2 border-gray-700 bg-transparent p-3 text-white placeholder-transparent transition-colors focus:border-cyan-400 min-h-28"
                 />
+                <Label
+                  htmlFor="coverLetter"
+                  className="absolute left-3 -top-2.5 bg-black/30 px-1 text-sm text-gray-400 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-cyan-400"
+                >
+                  Why You?
+                </Label>
               </div>
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Submitting..." : "Submit Application"}
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full rounded-md bg-cyan-400 py-3 text-base font-bold text-black shadow-[0_0_20px_rgb(34,211,238)] transition-all duration-300 hover:scale-[1.02] hover:bg-red-500 hover:text-white hover:shadow-[0_0_30px_rgb(239,68,68)]"
+              >
+                {isLoading ? "Submitting..." : "Send It"}
               </Button>
             </form>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

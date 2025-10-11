@@ -14,6 +14,18 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Users, Trophy, Target } from "lucide-react";
+import { z } from "zod";
+
+const recruitSchema = z.object({
+  fullName: z.string().trim().min(1, "Full name is required").max(100, "Name must be less than 100 characters"),
+  email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters"),
+  position: z.string().min(1, "Position is required").max(100, "Position must be less than 100 characters"),
+  coverLetter: z.string().trim().min(1, "Cover letter is required").max(5000, "Cover letter must be less than 5000 characters"),
+  resumeUrl: z.string().trim().max(500, "URL must be less than 500 characters").optional().refine(
+    (val) => !val || val === "" || z.string().url().safeParse(val).success,
+    "Invalid URL format"
+  )
+});
 
 const positions = [
   "Pro Player (Valorant)",
@@ -41,12 +53,20 @@ const Recruit = () => {
     e.preventDefault();
     setIsLoading(true);
 
+    // Validate input data
+    const result = recruitSchema.safeParse(formData);
+    if (!result.success) {
+      toast.error(result.error.errors[0].message);
+      setIsLoading(false);
+      return;
+    }
+
     const { error } = await supabase.from("recruitment_applications").insert({
-      full_name: formData.fullName,
-      email: formData.email,
-      position: formData.position,
-      cover_letter: formData.coverLetter,
-      resume_url: formData.resumeUrl || null,
+      full_name: result.data.fullName,
+      email: result.data.email,
+      position: result.data.position,
+      cover_letter: result.data.coverLetter,
+      resume_url: result.data.resumeUrl || null,
     });
 
     if (error) {

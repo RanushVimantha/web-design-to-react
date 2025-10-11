@@ -7,6 +7,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Mail, MessageSquare, Send } from "lucide-react";
+import { z } from "zod";
+
+const contactSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
+  email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters"),
+  subject: z.string().trim().min(1, "Subject is required").max(200, "Subject must be less than 200 characters"),
+  message: z.string().trim().min(1, "Message is required").max(2000, "Message must be less than 2000 characters")
+});
 
 const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,11 +29,19 @@ const Contact = () => {
     e.preventDefault();
     setIsLoading(true);
 
+    // Validate input data
+    const result = contactSchema.safeParse(formData);
+    if (!result.success) {
+      toast.error(result.error.errors[0].message);
+      setIsLoading(false);
+      return;
+    }
+
     const { error } = await supabase.from("contact_submissions").insert({
-      name: formData.name,
-      email: formData.email,
-      subject: formData.subject,
-      message: formData.message,
+      name: result.data.name,
+      email: result.data.email,
+      subject: result.data.subject,
+      message: result.data.message,
     });
 
     if (error) {

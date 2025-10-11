@@ -61,6 +61,10 @@ const RecruitmentApplications = () => {
   };
 
   const deleteApplication = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this application? This action cannot be undone.")) {
+      return;
+    }
+
     const { error } = await supabase
       .from("recruitment_applications")
       .delete()

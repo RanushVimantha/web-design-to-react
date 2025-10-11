@@ -22,8 +22,16 @@ const recruitSchema = z.object({
   position: z.string().min(1, "Position is required").max(100, "Position must be less than 100 characters"),
   coverLetter: z.string().trim().min(1, "Cover letter is required").max(5000, "Cover letter must be less than 5000 characters"),
   resumeUrl: z.string().trim().max(500, "URL must be less than 500 characters").optional().refine(
-    (val) => !val || val === "" || z.string().url().safeParse(val).success,
-    "Invalid URL format"
+    (val) => {
+      if (!val || val === "") return true;
+      try {
+        const url = new URL(val);
+        return ['http:', 'https:'].includes(url.protocol);
+      } catch {
+        return false;
+      }
+    },
+    "Only HTTP/HTTPS URLs are allowed"
   )
 });
 

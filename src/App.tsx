@@ -16,6 +16,7 @@ import Contact from "./pages/Contact";
 import Recruit from "./pages/Recruit";
 import PlayerProfile from "./pages/PlayerProfile";
 import Header from "./components/Header";
+import AdminRoute from "./components/AdminRoute";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 
 const queryClient = new QueryClient();
@@ -35,7 +36,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthRedirect />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard" element={<AdminRoute><Dashboard /></AdminRoute>} />
               <Route path="/teams" element={<Teams />} />
               <Route path="/teams/:id" element={<TeamDetail />} />
               <Route path="/players/:id" element={<PlayerProfile />} />

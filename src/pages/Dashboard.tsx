@@ -1,27 +1,52 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import RecruitmentApplications from "@/components/dashboard/RecruitmentApplications";
+import TeamsManagement from "@/components/dashboard/TeamsManagement";
+import PartnersManagement from "@/components/dashboard/PartnersManagement";
+import TournamentsManagement from "@/components/dashboard/TournamentsManagement";
+
 const Dashboard = () => {
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center pt-24">
-      <div className="text-center max-w-3xl px-4">
-        <h1 className="text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-cyan-400 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]">
-          Admin Dashboard
-        </h1>
-        <p className="text-xl text-gray-400 mb-8">
-          Welcome to your dashboard! This section is under development.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-          <div className="p-6 rounded-xl bg-gray-900/50 border border-red-500/30 hover:border-red-500 transition-all duration-300">
-            <h3 className="text-2xl font-bold text-red-500 mb-2">Recruitment</h3>
-            <p className="text-gray-400">Manage applications</p>
-          </div>
-          <div className="p-6 rounded-xl bg-gray-900/50 border border-cyan-400/30 hover:border-cyan-400 transition-all duration-300">
-            <h3 className="text-2xl font-bold text-cyan-400 mb-2">Users</h3>
-            <p className="text-gray-400">View registered users</p>
-          </div>
-          <div className="p-6 rounded-xl bg-gray-900/50 border border-red-500/30 hover:border-red-500 transition-all duration-300">
-            <h3 className="text-2xl font-bold text-red-500 mb-2">Teams</h3>
-            <p className="text-gray-400">Manage teams</p>
-          </div>
+    <div className="min-h-screen bg-background pt-24 px-4 sm:px-6 lg:px-8 pb-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-2">
+            Admin Dashboard
+          </h1>
+          <p className="text-muted-foreground">Manage all aspects of your esports organization</p>
         </div>
+
+        <Tabs defaultValue="recruitment" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 bg-muted/50 p-1">
+            <TabsTrigger value="recruitment" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Applications
+            </TabsTrigger>
+            <TabsTrigger value="teams" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Teams
+            </TabsTrigger>
+            <TabsTrigger value="partners" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Partners
+            </TabsTrigger>
+            <TabsTrigger value="tournaments" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Tournaments
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="recruitment" className="space-y-4">
+            <RecruitmentApplications />
+          </TabsContent>
+
+          <TabsContent value="teams" className="space-y-4">
+            <TeamsManagement />
+          </TabsContent>
+
+          <TabsContent value="partners" className="space-y-4">
+            <PartnersManagement />
+          </TabsContent>
+
+          <TabsContent value="tournaments" className="space-y-4">
+            <TournamentsManagement />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

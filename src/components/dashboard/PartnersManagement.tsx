@@ -10,6 +10,37 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Plus, Edit, Trash2, RefreshCw, ExternalLink } from "lucide-react";
+import { z } from "zod";
+
+const partnerSchema = z.object({
+  name: z.string().trim().min(1, "Partner name is required").max(100, "Name too long"),
+  description: z.string().trim().max(2000, "Description too long").optional(),
+  logo_url: z.string().trim().max(500, "URL too long").optional().refine(
+    (val) => {
+      if (!val || val === "") return true;
+      try {
+        const url = new URL(val);
+        return ['http:', 'https:'].includes(url.protocol);
+      } catch {
+        return false;
+      }
+    },
+    "Only HTTP/HTTPS URLs are allowed"
+  ),
+  website_url: z.string().trim().max(500, "URL too long").optional().refine(
+    (val) => {
+      if (!val || val === "") return true;
+      try {
+        const url = new URL(val);
+        return ['http:', 'https:'].includes(url.protocol);
+      } catch {
+        return false;
+      }
+    },
+    "Only HTTP/HTTPS URLs are allowed"
+  ),
+  partner_type: z.string().trim().min(1, "Partner type is required").max(50, "Type too long"),
+});
 
 interface Partner {
   id: string;
@@ -279,21 +310,23 @@ const PartnersManagement = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="logo_url">Logo URL</Label>
-                  <Input
-                    id="logo_url"
-                    value={formData.logo_url}
-                    onChange={(e) => setFormData({ ...formData, logo_url: e.target.value })}
-                    placeholder="https://example.com/logo.png"
-                  />
+                <Input
+                  id="logo_url"
+                  value={formData.logo_url}
+                  onChange={(e) => setFormData({ ...formData, logo_url: e.target.value })}
+                  placeholder="https://example.com/logo.png"
+                  maxLength={500}
+                />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="website_url">Website URL</Label>
-                  <Input
-                    id="website_url"
-                    value={formData.website_url}
-                    onChange={(e) => setFormData({ ...formData, website_url: e.target.value })}
-                    placeholder="https://example.com"
-                  />
+                <Input
+                  id="website_url"
+                  value={formData.website_url}
+                  onChange={(e) => setFormData({ ...formData, website_url: e.target.value })}
+                  placeholder="https://example.com"
+                  maxLength={500}
+                />
                 </div>
               </div>
               <DialogFooter>

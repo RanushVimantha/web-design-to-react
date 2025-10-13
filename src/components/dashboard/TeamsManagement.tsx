@@ -9,6 +9,37 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Plus, Edit, Trash2, RefreshCw } from "lucide-react";
+import { z } from "zod";
+
+const teamSchema = z.object({
+  name: z.string().trim().min(1, "Team name is required").max(100, "Name too long"),
+  game: z.string().trim().min(1, "Game is required").max(50, "Game name too long"),
+  description: z.string().trim().max(2000, "Description too long").optional(),
+  logo_url: z.string().trim().max(500, "URL too long").optional().refine(
+    (val) => {
+      if (!val || val === "") return true;
+      try {
+        const url = new URL(val);
+        return ['http:', 'https:'].includes(url.protocol);
+      } catch {
+        return false;
+      }
+    },
+    "Only HTTP/HTTPS URLs are allowed"
+  ),
+  banner_url: z.string().trim().max(500, "URL too long").optional().refine(
+    (val) => {
+      if (!val || val === "") return true;
+      try {
+        const url = new URL(val);
+        return ['http:', 'https:'].includes(url.protocol);
+      } catch {
+        return false;
+      }
+    },
+    "Only HTTP/HTTPS URLs are allowed"
+  ),
+});
 
 interface Team {
   id: string;
@@ -81,38 +112,41 @@ const TeamsManagement = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const payload = {
-      name: formData.name,
-      game: formData.game,
-      description: formData.description || null,
-      logo_url: formData.logo_url || null,
-      banner_url: formData.banner_url || null,
-    };
+    try {
+      const validated = teamSchema.parse(formData);
 
-    if (editingTeam) {
-      const { error } = await supabase
-        .from("teams")
-        .update(payload)
-        .eq("id", editingTeam.id);
+      const payload = {
+        name: validated.name,
+        game: validated.game,
+        description: validated.description || null,
+        logo_url: validated.logo_url || null,
+        banner_url: validated.banner_url || null,
+      };
 
-      if (error) {
-        toast.error("Failed to update team");
-      } else {
+      if (editingTeam) {
+        const { error } = await supabase
+          .from("teams")
+          .update(payload)
+          .eq("id", editingTeam.id);
+
+        if (error) throw error;
         toast.success("Team updated successfully");
-        setIsDialogOpen(false);
-        fetchTeams();
-      }
-    } else {
-      const { error } = await supabase
-        .from("teams")
-        .insert([payload]);
-
-      if (error) {
-        toast.error("Failed to create team");
       } else {
+        const { error } = await supabase
+          .from("teams")
+          .insert([payload]);
+
+        if (error) throw error;
         toast.success("Team created successfully");
-        setIsDialogOpen(false);
-        fetchTeams();
+      }
+      
+      setIsDialogOpen(false);
+      fetchTeams();
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+      } else {
+        toast.error(error.message || "Operation failed");
       }
     }
   };
@@ -252,21 +286,23 @@ const TeamsManagement = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="logo_url">Logo URL</Label>
-                  <Input
-                    id="logo_url"
-                    value={formData.logo_url}
-                    onChange={(e) => setFormData({ ...formData, logo_url: e.target.value })}
-                    placeholder="https://example.com/logo.png"
-                  />
+              <Input
+                id="logo_url"
+                value={formData.logo_url}
+                onChange={(e) => setFormData({ ...formData, logo_url: e.target.value })}
+                placeholder="https://example.com/logo.png"
+                maxLength={500}
+              />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="banner_url">Banner URL</Label>
-                  <Input
-                    id="banner_url"
-                    value={formData.banner_url}
-                    onChange={(e) => setFormData({ ...formData, banner_url: e.target.value })}
-                    placeholder="https://example.com/banner.png"
-                  />
+              <Input
+                id="banner_url"
+                value={formData.banner_url}
+                onChange={(e) => setFormData({ ...formData, banner_url: e.target.value })}
+                placeholder="https://example.com/banner.png"
+                maxLength={500}
+              />
                 </div>
               </div>
               <DialogFooter>

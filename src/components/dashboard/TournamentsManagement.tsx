@@ -10,6 +10,32 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Plus, Edit, Trash2, RefreshCw } from "lucide-react";
+import { z } from "zod";
+
+const tournamentSchema = z.object({
+  name: z.string().trim().min(1, "Tournament name is required").max(100, "Name too long"),
+  game: z.string().trim().min(1, "Game is required").max(50, "Game name too long"),
+  description: z.string().trim().max(3000, "Description too long").optional(),
+  banner_url: z.string().trim().max(500, "URL too long").optional().refine(
+    (val) => {
+      if (!val || val === "") return true;
+      try {
+        const url = new URL(val);
+        return ['http:', 'https:'].includes(url.protocol);
+      } catch {
+        return false;
+      }
+    },
+    "Only HTTP/HTTPS URLs are allowed"
+  ),
+  start_date: z.string().trim().min(1, "Start date is required"),
+  end_date: z.string().trim().optional(),
+  prize_pool: z.string().trim().refine(
+    (val) => !val || val === "" || (!isNaN(Number(val)) && Number(val) >= 0),
+    "Prize pool must be a positive number"
+  ).optional(),
+  status: z.enum(["upcoming", "ongoing", "completed"]),
+});
 
 interface Tournament {
   id: string;
@@ -335,12 +361,13 @@ const TournamentsManagement = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="banner_url">Banner URL</Label>
-                  <Input
-                    id="banner_url"
-                    value={formData.banner_url}
-                    onChange={(e) => setFormData({ ...formData, banner_url: e.target.value })}
-                    placeholder="https://example.com/banner.png"
-                  />
+              <Input
+                id="banner_url"
+                value={formData.banner_url}
+                onChange={(e) => setFormData({ ...formData, banner_url: e.target.value })}
+                placeholder="https://example.com/banner.png"
+                maxLength={500}
+              />
                 </div>
               </div>
               <DialogFooter>

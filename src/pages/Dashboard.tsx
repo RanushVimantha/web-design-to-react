@@ -3,6 +3,8 @@ import RecruitmentApplications from "@/components/dashboard/RecruitmentApplicati
 import TeamsManagement from "@/components/dashboard/TeamsManagement";
 import PartnersManagement from "@/components/dashboard/PartnersManagement";
 import TournamentsManagement from "@/components/dashboard/TournamentsManagement";
+import UsersManagement from "@/components/dashboard/UsersManagement";
+import PlayersManagement from "@/components/dashboard/PlayersManagement";
 
 const Dashboard = () => {
   return (
@@ -16,18 +18,24 @@ const Dashboard = () => {
         </div>
 
         <Tabs defaultValue="recruitment" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 bg-muted/50 p-1">
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6 bg-muted/50 p-1">
             <TabsTrigger value="recruitment" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               Applications
             </TabsTrigger>
             <TabsTrigger value="teams" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               Teams
             </TabsTrigger>
+            <TabsTrigger value="players" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Players
+            </TabsTrigger>
             <TabsTrigger value="partners" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               Partners
             </TabsTrigger>
             <TabsTrigger value="tournaments" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               Tournaments
+            </TabsTrigger>
+            <TabsTrigger value="users" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Users
             </TabsTrigger>
           </TabsList>
 
@@ -45,6 +53,14 @@ const Dashboard = () => {
 
           <TabsContent value="tournaments" className="space-y-4">
             <TournamentsManagement />
+          </TabsContent>
+
+          <TabsContent value="players" className="space-y-4">
+            <PlayersManagement />
+          </TabsContent>
+
+          <TabsContent value="users" className="space-y-4">
+            <UsersManagement />
           </TabsContent>
         </Tabs>
       </div>

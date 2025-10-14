@@ -121,41 +121,51 @@ const TournamentsManagement = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const payload = {
-      name: formData.name,
-      game: formData.game,
-      description: formData.description || null,
-      start_date: formData.start_date,
-      end_date: formData.end_date || null,
-      status: formData.status,
-      prize_pool: formData.prize_pool ? parseFloat(formData.prize_pool) : null,
-      banner_url: formData.banner_url || null,
-    };
+    try {
+      const validatedData = tournamentSchema.parse(formData);
+      
+      const payload = {
+        name: validatedData.name,
+        game: validatedData.game,
+        description: validatedData.description || null,
+        start_date: validatedData.start_date,
+        end_date: validatedData.end_date || null,
+        status: validatedData.status,
+        prize_pool: validatedData.prize_pool ? parseFloat(validatedData.prize_pool) : null,
+        banner_url: validatedData.banner_url || null,
+      };
 
-    if (editingTournament) {
-      const { error } = await supabase
-        .from("tournaments")
-        .update(payload)
-        .eq("id", editingTournament.id);
+      if (editingTournament) {
+        const { error } = await supabase
+          .from("tournaments")
+          .update(payload)
+          .eq("id", editingTournament.id);
 
-      if (error) {
-        toast.error("Failed to update tournament");
+        if (error) {
+          toast.error("Failed to update tournament");
+        } else {
+          toast.success("Tournament updated successfully");
+          setIsDialogOpen(false);
+          fetchTournaments();
+        }
       } else {
-        toast.success("Tournament updated successfully");
-        setIsDialogOpen(false);
-        fetchTournaments();
+        const { error } = await supabase
+          .from("tournaments")
+          .insert([payload]);
+
+        if (error) {
+          toast.error("Failed to create tournament");
+        } else {
+          toast.success("Tournament created successfully");
+          setIsDialogOpen(false);
+          fetchTournaments();
+        }
       }
-    } else {
-      const { error } = await supabase
-        .from("tournaments")
-        .insert([payload]);
-
-      if (error) {
-        toast.error("Failed to create tournament");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
       } else {
-        toast.success("Tournament created successfully");
-        setIsDialogOpen(false);
-        fetchTournaments();
+        toast.error("Validation failed");
       }
     }
   };
@@ -186,7 +196,7 @@ const TournamentsManagement = () => {
   };
 
   return (
-    <Card className="glass-card border-border">
+    <Card className="glass-card border-border animate-fade-in">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
@@ -194,10 +204,10 @@ const TournamentsManagement = () => {
             <CardDescription>Create and manage esports tournaments</CardDescription>
           </div>
           <div className="flex gap-2">
-            <Button onClick={fetchTournaments} variant="outline" size="icon">
+            <Button onClick={fetchTournaments} variant="outline" size="icon" className="transition-all duration-300 hover:scale-110 hover:rotate-180">
               <RefreshCw className="h-4 w-4" />
             </Button>
-            <Button onClick={() => openDialog()}>
+            <Button onClick={() => openDialog()} className="transition-all duration-300 hover:scale-105">
               <Plus className="h-4 w-4 mr-2" />
               Add Tournament
             </Button>
@@ -228,7 +238,7 @@ const TournamentsManagement = () => {
               </TableHeader>
               <TableBody>
                 {tournaments.map((tournament) => (
-                  <TableRow key={tournament.id} className="border-border hover:bg-muted/50">
+                  <TableRow key={tournament.id} className="border-border hover:bg-muted/50 transition-colors duration-200">
                     <TableCell className="font-medium">{tournament.name}</TableCell>
                     <TableCell>{tournament.game}</TableCell>
                     <TableCell>

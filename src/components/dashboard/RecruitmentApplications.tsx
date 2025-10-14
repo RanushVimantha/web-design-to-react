@@ -88,14 +88,14 @@ const RecruitmentApplications = () => {
   };
 
   return (
-    <Card className="glass-card border-border">
+    <Card className="glass-card border-border animate-fade-in">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-2xl">Recruitment Applications</CardTitle>
             <CardDescription>Review and manage applicant submissions</CardDescription>
           </div>
-          <Button onClick={fetchApplications} variant="outline" size="icon">
+          <Button onClick={fetchApplications} variant="outline" size="icon" className="transition-all duration-300 hover:scale-110 hover:rotate-180">
             <RefreshCw className="h-4 w-4" />
           </Button>
         </div>
@@ -124,7 +124,7 @@ const RecruitmentApplications = () => {
               </TableHeader>
               <TableBody>
                 {applications.map((app) => (
-                  <TableRow key={app.id} className="border-border hover:bg-muted/50">
+                  <TableRow key={app.id} className="border-border hover:bg-muted/50 transition-colors duration-200">
                     <TableCell className="font-medium">{app.full_name}</TableCell>
                     <TableCell>{app.email}</TableCell>
                     <TableCell>{app.position}</TableCell>

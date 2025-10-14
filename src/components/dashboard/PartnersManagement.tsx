@@ -113,38 +113,48 @@ const PartnersManagement = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const payload = {
-      name: formData.name,
-      partner_type: formData.partner_type,
-      description: formData.description || null,
-      logo_url: formData.logo_url || null,
-      website_url: formData.website_url || null,
-    };
+    try {
+      const validatedData = partnerSchema.parse(formData);
+      
+      const payload = {
+        name: validatedData.name,
+        partner_type: validatedData.partner_type,
+        description: validatedData.description || null,
+        logo_url: validatedData.logo_url || null,
+        website_url: validatedData.website_url || null,
+      };
 
-    if (editingPartner) {
-      const { error } = await supabase
-        .from("partners")
-        .update(payload)
-        .eq("id", editingPartner.id);
+      if (editingPartner) {
+        const { error } = await supabase
+          .from("partners")
+          .update(payload)
+          .eq("id", editingPartner.id);
 
-      if (error) {
-        toast.error("Failed to update partner");
+        if (error) {
+          toast.error("Failed to update partner");
+        } else {
+          toast.success("Partner updated successfully");
+          setIsDialogOpen(false);
+          fetchPartners();
+        }
       } else {
-        toast.success("Partner updated successfully");
-        setIsDialogOpen(false);
-        fetchPartners();
+        const { error } = await supabase
+          .from("partners")
+          .insert([payload]);
+
+        if (error) {
+          toast.error("Failed to create partner");
+        } else {
+          toast.success("Partner created successfully");
+          setIsDialogOpen(false);
+          fetchPartners();
+        }
       }
-    } else {
-      const { error } = await supabase
-        .from("partners")
-        .insert([payload]);
-
-      if (error) {
-        toast.error("Failed to create partner");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
       } else {
-        toast.success("Partner created successfully");
-        setIsDialogOpen(false);
-        fetchPartners();
+        toast.error("Validation failed");
       }
     }
   };
@@ -176,7 +186,7 @@ const PartnersManagement = () => {
   };
 
   return (
-    <Card className="glass-card border-border">
+    <Card className="glass-card border-border animate-fade-in">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
@@ -184,10 +194,10 @@ const PartnersManagement = () => {
             <CardDescription>Manage your organization's partners and sponsors</CardDescription>
           </div>
           <div className="flex gap-2">
-            <Button onClick={fetchPartners} variant="outline" size="icon">
+            <Button onClick={fetchPartners} variant="outline" size="icon" className="transition-all duration-300 hover:scale-110 hover:rotate-180">
               <RefreshCw className="h-4 w-4" />
             </Button>
-            <Button onClick={() => openDialog()}>
+            <Button onClick={() => openDialog()} className="transition-all duration-300 hover:scale-105">
               <Plus className="h-4 w-4 mr-2" />
               Add Partner
             </Button>
@@ -217,7 +227,7 @@ const PartnersManagement = () => {
               </TableHeader>
               <TableBody>
                 {partners.map((partner) => (
-                  <TableRow key={partner.id} className="border-border hover:bg-muted/50">
+                  <TableRow key={partner.id} className="border-border hover:bg-muted/50 transition-colors duration-200">
                     <TableCell className="font-medium">{partner.name}</TableCell>
                     <TableCell>
                       <Badge className={getTypeColor(partner.partner_type)} variant="outline">

@@ -168,7 +168,7 @@ const TeamsManagement = () => {
   };
 
   return (
-    <Card className="glass-card border-border">
+    <Card className="glass-card border-border animate-fade-in">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
@@ -176,10 +176,10 @@ const TeamsManagement = () => {
             <CardDescription>Create and manage your esports teams</CardDescription>
           </div>
           <div className="flex gap-2">
-            <Button onClick={fetchTeams} variant="outline" size="icon">
+            <Button onClick={fetchTeams} variant="outline" size="icon" className="transition-all duration-300 hover:scale-110 hover:rotate-180">
               <RefreshCw className="h-4 w-4" />
             </Button>
-            <Button onClick={() => openDialog()}>
+            <Button onClick={() => openDialog()} className="transition-all duration-300 hover:scale-105">
               <Plus className="h-4 w-4 mr-2" />
               Add Team
             </Button>
@@ -209,7 +209,7 @@ const TeamsManagement = () => {
               </TableHeader>
               <TableBody>
                 {teams.map((team) => (
-                  <TableRow key={team.id} className="border-border hover:bg-muted/50">
+                  <TableRow key={team.id} className="border-border hover:bg-muted/50 transition-colors duration-200">
                     <TableCell className="font-medium">{team.name}</TableCell>
                     <TableCell>{team.game}</TableCell>
                     <TableCell className="max-w-xs truncate">{team.description}</TableCell>

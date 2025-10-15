@@ -18,9 +18,33 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
         setChecking(false);
         return;
       }
-      const { data } = await supabase.rpc('is_admin', { user_id: user.id });
-      setIsAdmin(data === true);
-      setChecking(false);
+
+      // Add timeout for admin check
+      const timeoutId = setTimeout(() => {
+        console.error('Admin check timed out');
+        setIsAdmin(false);
+        setChecking(false);
+      }, 5000);
+
+      try {
+        const { data, error } = await supabase.rpc('is_admin', { user_id: user.id });
+        clearTimeout(timeoutId);
+        
+        if (error) {
+          console.error('Admin check failed:', error);
+          setIsAdmin(false);
+          setChecking(false);
+          return;
+        }
+        
+        setIsAdmin(data === true);
+        setChecking(false);
+      } catch (err) {
+        clearTimeout(timeoutId);
+        console.error('Admin check exception:', err);
+        setIsAdmin(false);
+        setChecking(false);
+      }
     };
     checkAdmin();
   }, [user]);

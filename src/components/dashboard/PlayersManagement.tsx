@@ -13,10 +13,10 @@ import { z } from "zod";
 
 const playerSchema = z.object({
   gamertag: z.string().trim().min(1, "Gamertag is required").max(50, "Gamertag too long"),
-  real_name: z.string().trim().max(100, "Name too long").optional(),
-  role_in_team: z.string().trim().max(50, "Role too long").optional(),
-  bio: z.string().trim().max(1000, "Bio too long").optional(),
-  avatar_url: z.string().trim().max(500, "URL too long").optional().refine(
+  real_name: z.string().trim().max(100, "Name too long").optional().or(z.literal("")),
+  role_in_team: z.string().trim().max(50, "Role too long").optional().or(z.literal("")),
+  bio: z.string().trim().max(1000, "Bio too long").optional().or(z.literal("")),
+  avatar_url: z.string().trim().max(500, "URL too long").optional().or(z.literal("")).refine(
     (val) => {
       if (!val || val === "") return true;
       try {
@@ -28,32 +28,7 @@ const playerSchema = z.object({
     },
     "Only HTTP/HTTPS URLs are allowed"
   ),
-  achievements: z.array(z.object({
-    title: z.string().trim().max(100),
-    date: z.string().optional(),
-    description: z.string().trim().max(500).optional()
-  })).optional(),
-  gaming_setup: z.object({
-    mouse: z.string().trim().max(100).optional(),
-    keyboard: z.string().trim().max(100).optional(),
-    headset: z.string().trim().max(100).optional(),
-    monitor: z.string().trim().max(100).optional()
-  }).optional(),
-  social_links: z.object({
-    twitter: z.string().url().max(200).optional(),
-    twitch: z.string().url().max(200).optional(),
-    youtube: z.string().url().max(200).optional(),
-    instagram: z.string().url().max(200).optional()
-  }).optional().refine((val) => {
-    if (!val) return true;
-    return Object.values(val).every(url => {
-      if (!url) return true;
-      try {
-        const parsed = new URL(url);
-        return ['http:', 'https:'].includes(parsed.protocol);
-      } catch { return false; }
-    });
-  }, "Only HTTP/HTTPS URLs allowed in social links")
+  team_id: z.string().optional().or(z.literal(""))
 });
 
 interface Player {
@@ -128,11 +103,11 @@ const PlayersManagement = () => {
 
       const playerData = {
         gamertag: validated.gamertag,
-        real_name: validated.real_name || null,
-        role_in_team: validated.role_in_team || null,
-        bio: validated.bio || null,
-        avatar_url: validated.avatar_url || null,
-        team_id: formData.team_id || null,
+        real_name: validated.real_name && validated.real_name !== "" ? validated.real_name : null,
+        role_in_team: validated.role_in_team && validated.role_in_team !== "" ? validated.role_in_team : null,
+        bio: validated.bio && validated.bio !== "" ? validated.bio : null,
+        avatar_url: validated.avatar_url && validated.avatar_url !== "" ? validated.avatar_url : null,
+        team_id: validated.team_id && validated.team_id !== "" ? validated.team_id : null,
       };
 
       if (editingPlayer) {

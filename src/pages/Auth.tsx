@@ -7,6 +7,19 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { z } from "zod";
+
+const signupSchema = z.object({
+  fullName: z.string().trim().min(1, "Name is required").max(100, "Name too long"),
+  email: z.string().trim().email("Invalid email").max(255, "Email too long"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .max(72, "Password too long")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character")
+});
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -35,7 +48,15 @@ const Auth = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    const { error } = await signUp(signupData.email, signupData.password, signupData.fullName);
+    // Validate password strength
+    const result = signupSchema.safeParse(signupData);
+    if (!result.success) {
+      toast.error(result.error.errors[0].message);
+      setIsLoading(false);
+      return;
+    }
+    
+    const { error } = await signUp(result.data.email, result.data.password, result.data.fullName);
     
     if (error) {
       toast.error(error.message);
@@ -121,8 +142,11 @@ const Auth = () => {
                     value={signupData.password}
                     onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
                     required
-                    minLength={6}
+                    minLength={8}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Must be 8+ characters with uppercase, lowercase, number, and special character
+                  </p>
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? "Creating account..." : "Create Account"}

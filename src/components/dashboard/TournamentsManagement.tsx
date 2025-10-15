@@ -78,7 +78,9 @@ const TournamentsManagement = () => {
 
     if (error) {
       toast.error("Failed to fetch tournaments");
-      console.error(error);
+      if (import.meta.env.DEV) {
+        console.error(error);
+      }
     } else {
       setTournaments(data || []);
     }

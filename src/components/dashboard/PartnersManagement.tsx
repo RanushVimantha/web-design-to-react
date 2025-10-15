@@ -76,7 +76,9 @@ const PartnersManagement = () => {
 
     if (error) {
       toast.error("Failed to fetch partners");
-      console.error(error);
+      if (import.meta.env.DEV) {
+        console.error(error);
+      }
     } else {
       setPartners(data || []);
     }

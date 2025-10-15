@@ -16,6 +16,9 @@ const contactSchema = z.object({
   message: z.string().trim().min(1, "Message is required").max(2000, "Message must be less than 2000 characters")
 });
 
+const RATE_LIMIT_KEY = 'last_contact_submission';
+const RATE_LIMIT_MS = 60000; // 1 minute
+
 const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -28,6 +31,14 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
+    // Check rate limit
+    const lastSubmission = localStorage.getItem(RATE_LIMIT_KEY);
+    if (lastSubmission && Date.now() - parseInt(lastSubmission) < RATE_LIMIT_MS) {
+      toast.error('Please wait before submitting again');
+      setIsLoading(false);
+      return;
+    }
 
     // Validate input data
     const result = contactSchema.safeParse(formData);
@@ -49,6 +60,7 @@ const Contact = () => {
     } else {
       toast.success("Message sent successfully! We'll get back to you soon.");
       setFormData({ name: "", email: "", subject: "", message: "" });
+      localStorage.setItem(RATE_LIMIT_KEY, Date.now().toString());
     }
 
     setIsLoading(false);

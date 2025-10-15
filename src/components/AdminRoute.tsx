@@ -21,7 +21,9 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
 
       // Add timeout for admin check
       const timeoutId = setTimeout(() => {
-        console.error('Admin check timed out');
+        if (import.meta.env.DEV) {
+          console.error('Admin check timed out');
+        }
         setIsAdmin(false);
         setChecking(false);
       }, 5000);
@@ -31,7 +33,9 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
         clearTimeout(timeoutId);
         
         if (error) {
-          console.error('Admin check failed:', error);
+          if (import.meta.env.DEV) {
+            console.error('Admin check failed:', error);
+          }
           setIsAdmin(false);
           setChecking(false);
           return;
@@ -41,7 +45,9 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
         setChecking(false);
       } catch (err) {
         clearTimeout(timeoutId);
-        console.error('Admin check exception:', err);
+        if (import.meta.env.DEV) {
+          console.error('Admin check exception:', err);
+        }
         setIsAdmin(false);
         setChecking(false);
       }

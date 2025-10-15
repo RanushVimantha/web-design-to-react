@@ -47,6 +47,9 @@ const positions = [
   "Graphic Designer",
 ];
 
+const RATE_LIMIT_KEY = 'last_recruitment_submission';
+const RATE_LIMIT_MS = 60000; // 1 minute
+
 const Recruit = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -60,6 +63,14 @@ const Recruit = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
+    // Check rate limit
+    const lastSubmission = localStorage.getItem(RATE_LIMIT_KEY);
+    if (lastSubmission && Date.now() - parseInt(lastSubmission) < RATE_LIMIT_MS) {
+      toast.error('Please wait before submitting again');
+      setIsLoading(false);
+      return;
+    }
 
     // Validate input data
     const result = recruitSchema.safeParse(formData);
@@ -82,6 +93,7 @@ const Recruit = () => {
     } else {
       toast.success("Application submitted successfully! We'll review it and get back to you.");
       setFormData({ fullName: "", email: "", position: "", coverLetter: "", resumeUrl: "" });
+      localStorage.setItem(RATE_LIMIT_KEY, Date.now().toString());
     }
 
     setIsLoading(false);

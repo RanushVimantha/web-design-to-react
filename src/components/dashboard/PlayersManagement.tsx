@@ -103,6 +103,9 @@ const PlayersManagement = () => {
       setPlayers(playersRes.data || []);
       setTeams(teamsRes.data || []);
     } catch (error: any) {
+      if (import.meta.env.DEV) {
+        console.error(error);
+      }
       toast({
         title: "Error",
         description: error.message,

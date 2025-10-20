@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Trophy, DollarSign } from "lucide-react";
-import { format } from "date-fns";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search } from "lucide-react";
 
 interface Tournament {
   id: string;
@@ -15,220 +17,187 @@ interface Tournament {
   prize_pool: number | null;
   status: string | null;
   banner_url: string | null;
+  tournament_type: string | null;
 }
 
 const Tournaments = () => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [gameFilter, setGameFilter] = useState("ALL");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchTournaments = async () => {
-      const { data, error } = await supabase
-        .from("tournaments")
-        .select("*")
-        .order("start_date", { ascending: false });
-
-      if (!error && data) {
-        setTournaments(data);
-      }
-      setLoading(false);
-    };
-
     fetchTournaments();
   }, []);
 
-  const getStatusColor = (status: string | null) => {
-    switch (status) {
-      case "ongoing":
-        return "default";
-      case "upcoming":
-        return "secondary";
-      case "completed":
-        return "outline";
-      default:
-        return "secondary";
+  const fetchTournaments = async () => {
+    const { data, error } = await supabase
+      .from("tournaments")
+      .select("*")
+      .order("start_date", { ascending: false });
+
+    if (!error && data) {
+      setTournaments(data);
     }
+    setLoading(false);
   };
+
+  const filteredTournaments = tournaments.filter((tournament) => {
+    const matchesSearch = tournament.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          tournament.game.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === "ALL" || tournament.status === statusFilter.toLowerCase();
+    const matchesGame = gameFilter === "ALL" || tournament.game === gameFilter;
+    return matchesSearch && matchesStatus && matchesGame;
+  });
+
+  const games = Array.from(new Set(tournaments.map(t => t.game)));
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center pt-20">
+      <div className="min-h-screen flex items-center justify-center pt-20 bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
-      <div className="relative pt-48 pb-32 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)' }}>
-        <div className="px-10 flex flex-col items-center text-center">
-          <h1 className="text-white text-8xl font-bold leading-tight tracking-tighter max-w-4xl uppercase drop-shadow-[0_0_10px_rgb(255,0,0)]">
-            Tournament Hub
-          </h1>
-          <p className="text-white/70 text-2xl mt-6 max-w-3xl font-light">
-            Where Legends Are Forged and Champions Rise.
-          </p>
-        </div>
+    <div className="relative min-h-screen w-full overflow-x-hidden bg-background">
+      {/* Animated Background Effects */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+        <div className="absolute -top-64 -left-64 w-[40rem] h-[40rem] bg-red-500/20 rounded-full blur-3xl animate-[spin_20s_linear_infinite]"></div>
+        <div className="absolute -bottom-64 -right-64 w-[40rem] h-[40rem] bg-cyan-400/20 rounded-full blur-3xl animate-[spin_25s_linear_infinite_reverse]"></div>
       </div>
 
-      <div className="px-10 w-full mx-auto py-20">
-        <div className="flex flex-col gap-16">
-          <div>
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-4xl font-bold text-white">
-                <span className="text-cyan-400 drop-shadow-[0_0_10px_rgb(0,191,255)]">UPCOMING</span> TOURNAMENTS
-              </h2>
-              <Badge className="bg-cyan-400/20 text-cyan-400 border-cyan-400/50 px-4 py-2 text-lg">
-                {tournaments.filter(t => t.status === 'upcoming').length} Events
-              </Badge>
+      <div className="relative z-10 pt-24 pb-10">
+        <main className="flex-1 px-4 sm:px-6 lg:px-16 py-10">
+          <div className="max-w-7xl mx-auto">
+            {/* Page Title */}
+            <div className="text-center mb-12">
+              <h1 className="text-5xl sm:text-6xl font-bold text-white uppercase tracking-widest relative inline-block font-orbitron">
+                Tournaments
+                <span className="absolute -top-2 -left-4 text-7xl text-red-500/20 -z-10 font-black">EVENTS</span>
+              </h1>
+              <p className="mt-4 text-white/60 text-lg">Battlegrounds of the elite. Find your next challenge.</p>
             </div>
 
-            <div className="space-y-6">
-              {tournaments.filter(t => t.status === 'upcoming').map((tournament) => (
+            {/* Filters */}
+            <div className="flex flex-col md:flex-row gap-4 mb-8 max-w-4xl mx-auto">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/40" />
+                <Input
+                  placeholder="SEARCH EVENTS"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/40 h-12"
+                />
+              </div>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-full md:w-[180px] bg-white/5 border-white/10 text-white h-12">
+                  <SelectValue placeholder="STATUS" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ALL">ALL</SelectItem>
+                  <SelectItem value="upcoming">UPCOMING</SelectItem>
+                  <SelectItem value="ongoing">ONGOING</SelectItem>
+                  <SelectItem value="completed">COMPLETED</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={gameFilter} onValueChange={setGameFilter}>
+                <SelectTrigger className="w-full md:w-[180px] bg-white/5 border-white/10 text-white h-12">
+                  <SelectValue placeholder="GAMES" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ALL">ALL</SelectItem>
+                  {games.map(game => (
+                    <SelectItem key={game} value={game}>{game}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Tournament Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredTournaments.map((tournament) => (
                 <div
                   key={tournament.id}
-                  className="tournament-list-item group relative rounded-lg p-6 cursor-pointer"
+                  className="tournament-card relative rounded-2xl group transition-all duration-500 cursor-pointer"
+                  onClick={() => navigate(`/tournaments/${tournament.id}`)}
                 >
-                  <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
-                    {tournament.banner_url && (
-                      <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden flex-shrink-0">
-                        <img
-                          src={tournament.banner_url}
-                          alt={tournament.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
+                  <div className="tournament-card-inner relative overflow-hidden flex flex-col">
+                    {/* Tournament Banner */}
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-in-out group-hover:scale-110"
+                      style={{
+                        backgroundImage: tournament.banner_url 
+                          ? `url(${tournament.banner_url})` 
+                          : 'linear-gradient(135deg, rgba(239, 68, 68, 0.5), rgba(6, 182, 212, 0.5))'
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
                     
-                    <div className="flex-1 space-y-3">
-                      <div className="flex items-start justify-between gap-4">
-                        <h3 className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors">
-                          {tournament.name}
-                        </h3>
-                        <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
-                          {tournament.status || "upcoming"}
-                        </Badge>
-                      </div>
+                    {/* Content */}
+                    <div className="relative flex flex-col justify-end p-6 h-96 mt-auto">
+                      <Badge className="absolute top-6 right-6 bg-red-500/80 text-white border-none">
+                        {tournament.status?.toUpperCase() || 'UPCOMING'}
+                      </Badge>
                       
-                      <p className="text-gray-400 text-sm">{tournament.description || "Competitive tournament"}</p>
+                      <h3 className="text-3xl font-bold text-white mb-2 transition-all duration-300 group-hover:text-red-500 font-orbitron">
+                        {tournament.name}
+                      </h3>
+                      <p className="text-white/70 text-sm mb-2">{tournament.game}</p>
+                      {tournament.prize_pool && (
+                        <p className="text-cyan-400 font-bold text-lg mb-4">
+                          ${tournament.prize_pool.toLocaleString()} Prize Pool
+                        </p>
+                      )}
                       
-                      <div className="flex flex-wrap gap-6 text-sm">
-                        <div className="flex items-center gap-2 text-gray-400">
-                          <Calendar className="h-4 w-4" />
-                          <span>
-                            {format(new Date(tournament.start_date), "MMM dd, yyyy")}
-                            {tournament.end_date &&
-                              ` - ${format(new Date(tournament.end_date), "MMM dd, yyyy")}`}
-                          </span>
-                        </div>
-                        
-                        {tournament.prize_pool && (
-                          <div className="flex items-center gap-2 text-cyan-400 font-bold">
-                            <Trophy className="h-4 w-4" />
-                            <span>${tournament.prize_pool.toLocaleString()}</span>
-                          </div>
-                        )}
-                        
-                        <Badge className="bg-red-500/20 text-red-400 border-red-500/50">
-                          {tournament.game}
-                        </Badge>
+                      <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-4 group-hover:translate-y-0">
+                        <button className="flex-1 py-2.5 px-4 rounded-lg bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-red-500/30">
+                          View Tournament
+                        </button>
+                        <button className="flex-1 py-2.5 px-4 rounded-lg bg-white/10 text-white text-sm font-semibold hover:bg-white/20 backdrop-blur-sm border border-white/20 transition-all duration-300 transform hover:scale-105">
+                          Register
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
 
-          {tournaments.filter(t => t.status === 'completed').length > 0 && (
-            <div>
-              <h2 className="text-4xl font-bold text-white mb-8">
-                <span className="text-red-500 drop-shadow-[0_0_10px_rgb(255,0,0)]">PAST</span> TOURNAMENTS
-              </h2>
-
-              <div className="space-y-6">
-                {tournaments.filter(t => t.status === 'completed').map((tournament) => (
-                  <div
-                    key={tournament.id}
-                    className="tournament-list-item group relative rounded-lg p-6 opacity-60 hover:opacity-100 transition-opacity"
-                  >
-                    <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
-                      {tournament.banner_url && (
-                        <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden flex-shrink-0">
-                          <img
-                            src={tournament.banner_url}
-                            alt={tournament.name}
-                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all"
-                          />
-                        </div>
-                      )}
-                      
-                      <div className="flex-1 space-y-3">
-                        <div className="flex items-start justify-between gap-4">
-                          <h3 className="text-2xl font-bold text-white">{tournament.name}</h3>
-                          <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/50">
-                            Completed
-                          </Badge>
-                        </div>
-                        
-                        <p className="text-gray-400 text-sm">{tournament.description || "Past tournament"}</p>
-                        
-                        <div className="flex flex-wrap gap-6 text-sm">
-                          <div className="flex items-center gap-2 text-gray-400">
-                            <Calendar className="h-4 w-4" />
-                            <span>
-                              {format(new Date(tournament.start_date), "MMM dd, yyyy")}
-                            </span>
-                          </div>
-                          
-                          {tournament.prize_pool && (
-                            <div className="flex items-center gap-2 text-gray-400">
-                              <Trophy className="h-4 w-4" />
-                              <span>${tournament.prize_pool.toLocaleString()}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+            {filteredTournaments.length === 0 && (
+              <div className="text-center py-20">
+                <p className="text-white/60 text-xl">No tournaments found matching your criteria</p>
               </div>
-            </div>
-          )}
-        </div>
-
-        {tournaments.length === 0 && (
-          <div className="text-center py-12">
-            <Trophy className="h-16 w-16 mx-auto mb-4 text-gray-600" />
-            <p className="text-gray-400 text-lg">No tournaments yet. Check back soon!</p>
+            )}
           </div>
-        )}
+        </main>
       </div>
 
       <style>{`
-        .tournament-list-item {
-          background: linear-gradient(90deg, rgba(10, 10, 10, 0.8), #0a0a0a);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
-        }
-        .tournament-list-item:before {
+        .tournament-card::before {
           content: '';
           position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgb(0, 191, 255), transparent);
-          transition: left 0.5s ease;
+          inset: 0;
+          background: conic-gradient(from 180deg at 50% 50%, rgb(6, 182, 212) 0deg, rgb(239, 68, 68) 180deg, rgb(6, 182, 212) 360deg);
+          z-index: 0;
+          opacity: 0;
+          transition: opacity 500ms;
+          border-radius: 1rem;
         }
-        .tournament-list-item:hover:before {
-          left: 100%;
+        .tournament-card:hover::before {
+          opacity: 1;
         }
-        .tournament-list-item:hover {
-          transform: scale(1.02);
-          box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
+        .tournament-card-inner {
+          position: relative;
+          z-index: 1;
+          background-color: #111;
+          border-radius: 0.875rem;
+          height: calc(100% - 4px);
+          width: calc(100% - 4px);
+          margin: 2px;
         }
       `}</style>
     </div>

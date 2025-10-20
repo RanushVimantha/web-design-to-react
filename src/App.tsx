@@ -11,12 +11,15 @@ import Dashboard from "./pages/Dashboard";
 import Teams from "./pages/Teams";
 import TeamDetail from "./pages/TeamDetail";
 import Tournaments from "./pages/Tournaments";
+import TournamentDetail from "./pages/TournamentDetail";
 import Partners from "./pages/Partners";
 import Contact from "./pages/Contact";
 import Recruit from "./pages/Recruit";
 import PlayerProfile from "./pages/PlayerProfile";
+import MyTeams from "./pages/MyTeams";
 import Header from "./components/Header";
 import AdminRoute from "./components/AdminRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 
 const queryClient = new QueryClient();
@@ -39,8 +42,10 @@ const App = () => {
               <Route path="/dashboard" element={<AdminRoute><Dashboard /></AdminRoute>} />
               <Route path="/teams" element={<Teams />} />
               <Route path="/teams/:id" element={<TeamDetail />} />
+              <Route path="/my-teams" element={<ProtectedRoute><MyTeams /></ProtectedRoute>} />
               <Route path="/players/:id" element={<PlayerProfile />} />
               <Route path="/tournaments" element={<Tournaments />} />
+              <Route path="/tournaments/:id" element={<TournamentDetail />} />
               <Route path="/partners" element={<Partners />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/recruit" element={<Recruit />} />

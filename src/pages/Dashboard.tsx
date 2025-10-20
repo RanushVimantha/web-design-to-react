@@ -5,6 +5,8 @@ import PartnersManagement from "@/components/dashboard/PartnersManagement";
 import TournamentsManagement from "@/components/dashboard/TournamentsManagement";
 import UsersManagement from "@/components/dashboard/UsersManagement";
 import PlayersManagement from "@/components/dashboard/PlayersManagement";
+import UserVerifications from "@/components/dashboard/UserVerifications";
+import TournamentRegistrations from "@/components/dashboard/TournamentRegistrations";
 
 const Dashboard = () => {
   return (
@@ -18,9 +20,15 @@ const Dashboard = () => {
         </div>
 
         <Tabs defaultValue="recruitment" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6 bg-muted/50 p-1 animate-fade-in">
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-8 bg-muted/50 p-1 animate-fade-in">
             <TabsTrigger value="recruitment" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300 hover:scale-105">
               Applications
+            </TabsTrigger>
+            <TabsTrigger value="verifications" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300 hover:scale-105">
+              Verifications
+            </TabsTrigger>
+            <TabsTrigger value="registrations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300 hover:scale-105">
+              Registrations
             </TabsTrigger>
             <TabsTrigger value="teams" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300 hover:scale-105">
               Teams
@@ -41,6 +49,14 @@ const Dashboard = () => {
 
           <TabsContent value="recruitment" className="space-y-4">
             <RecruitmentApplications />
+          </TabsContent>
+
+          <TabsContent value="verifications" className="space-y-4">
+            <UserVerifications />
+          </TabsContent>
+
+          <TabsContent value="registrations" className="space-y-4">
+            <TournamentRegistrations />
           </TabsContent>
 
           <TabsContent value="teams" className="space-y-4">

@@ -19,6 +19,7 @@ const Header: React.FC<HeaderProps> = ({ onAuthIconClick }) => {
   const links = [
     { label: "Home", to: "/" },
     { label: "Teams", to: "/teams" },
+    { label: "My Teams", to: "/my-teams" },
     { label: "Tournaments", to: "/tournaments" },
     { label: "Partners", to: "/partners" },
     { label: "Recruit", to: "/recruit" },
@@ -28,19 +29,12 @@ const Header: React.FC<HeaderProps> = ({ onAuthIconClick }) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/50 backdrop-blur-xl">
       {/* Logo */}
-      <div className="flex items-center gap-4 text-white">
-        <svg
-          className="h-10 w-10 text-red-500"
-          fill="none"
-          viewBox="0 0 48 48"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" fill="currentColor" />
-        </svg>
+      <NavLink to="/" className="flex items-center gap-4 text-white">
+        <img src="/src/assets/ascendium-logo.png" alt="Ascendium Logo" className="h-12 w-12" />
         <h2 className="text-white text-2xl font-bold tracking-widest uppercase font-orbitron">
           Ascendium
         </h2>
-      </div>
+      </NavLink>
 
       {/* Navigation links */}
       <nav className="hidden lg:flex flex-1 justify-center gap-10">

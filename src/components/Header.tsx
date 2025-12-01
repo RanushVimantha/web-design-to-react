@@ -16,15 +16,21 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onAuthIconClick }) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const links = [
+  
+  const publicLinks = [
     { label: "Home", to: "/" },
     { label: "Teams", to: "/teams" },
-    { label: "My Teams", to: "/my-teams" },
     { label: "Tournaments", to: "/tournaments" },
     { label: "Partners", to: "/partners" },
     { label: "Recruit", to: "/recruit" },
     { label: "Contact", to: "/contact" },
   ];
+  
+  const authLinks = [
+    { label: "My Teams", to: "/my-teams" },
+  ];
+  
+  const links = user ? [...publicLinks.slice(0, 2), ...authLinks, ...publicLinks.slice(2)] : publicLinks;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/50 backdrop-blur-xl">

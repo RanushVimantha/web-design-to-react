@@ -21,6 +21,10 @@ const teamSchema = z.object({
   logo_url: z.string().trim().max(500, "URL too long").optional().or(z.literal("")),
 });
 
+const inviteEmailSchema = z.object({
+  email: z.string().trim().email("Invalid email address").max(255, "Email too long").toLowerCase(),
+});
+
 interface Team {
   id: string;
   name: string;
@@ -37,7 +41,7 @@ interface TeamMember {
   user_id: string;
   role: string;
   is_verified: boolean;
-  profiles: { full_name: string; email: string; is_verified: boolean };
+  profiles: { full_name: string; is_verified: boolean };
 }
 
 const MyTeams = () => {
@@ -95,7 +99,7 @@ const MyTeams = () => {
         user_id,
         role,
         is_verified,
-        profiles!inner(full_name, email, is_verified)
+        profiles!inner(full_name, is_verified)
       `)
       .eq("team_id", teamId);
 
@@ -149,20 +153,44 @@ const MyTeams = () => {
   const handleInviteMember = async () => {
     if (!selectedTeam || !inviteEmail) return;
 
-    const { error } = await supabase
-      .from("team_invitations")
-      .insert({
-        team_id: selectedTeam.id,
-        invited_by: user?.id,
-        invited_user_email: inviteEmail,
-      });
+    try {
+      const validated = inviteEmailSchema.parse({ email: inviteEmail });
+      
+      // Check for existing pending invitation
+      const { data: existing } = await supabase
+        .from("team_invitations")
+        .select("id")
+        .eq("team_id", selectedTeam.id)
+        .eq("invited_user_email", validated.email)
+        .eq("status", "pending")
+        .maybeSingle();
 
-    if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: "Success", description: "Invitation sent!" });
-      setShowInviteDialog(false);
-      setInviteEmail("");
+      if (existing) {
+        toast({ title: "Error", description: "Invitation already sent to this email", variant: "destructive" });
+        return;
+      }
+
+      const { error } = await supabase
+        .from("team_invitations")
+        .insert({
+          team_id: selectedTeam.id,
+          invited_by: user?.id,
+          invited_user_email: validated.email,
+        });
+
+      if (error) {
+        toast({ title: "Error", description: error.message, variant: "destructive" });
+      } else {
+        toast({ title: "Success", description: "Invitation sent!" });
+        setShowInviteDialog(false);
+        setInviteEmail("");
+      }
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        toast({ title: "Validation Error", description: error.errors[0].message, variant: "destructive" });
+      } else {
+        toast({ title: "Error", description: error.message, variant: "destructive" });
+      }
     }
   };
 
@@ -356,7 +384,6 @@ const MyTeams = () => {
                               <div className="flex items-center gap-3">
                                 <div>
                                   <p className="text-white font-semibold">{member.profiles.full_name}</p>
-                                  <p className="text-white/60 text-sm">{member.profiles.email}</p>
                                 </div>
                                 {member.role === "captain" && (
                                   <Badge className="bg-red-500 text-white">Captain</Badge>

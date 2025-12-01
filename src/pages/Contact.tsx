@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Mail, MessageSquare, Send } from "lucide-react";
+import { Mail, MessageSquare, Send, Headphones } from "lucide-react";
 import { z } from "zod";
+import contactHero from "@/assets/contact-hero.jpg";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
@@ -67,104 +68,138 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pt-24 pb-12 px-4">
-      <div className="container mx-auto max-w-4xl">
-        <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
-          <p className="text-muted-foreground text-lg">
-            Have questions? We'd love to hear from you.
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <div className="relative h-[40vh] min-h-[300px] w-full">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${contactHero})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-cyan-500/10" />
+        
+        {/* Animated effects */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-32 -left-32 w-96 h-96 bg-red-500/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
+        </div>
+        
+        {/* Hero Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full pt-20 px-4">
+          <div className="flex items-center gap-3 mb-4">
+            <Headphones className="h-8 w-8 text-cyan-400" />
+            <span className="text-cyan-400 uppercase tracking-[0.3em] text-sm font-semibold">Get In Touch</span>
+          </div>
+          <h1 className="text-5xl sm:text-7xl font-bold text-white uppercase tracking-widest text-center font-orbitron">
+            Contact Us
+          </h1>
+          <p className="mt-4 text-white/70 text-lg text-center max-w-2xl">
+            Have questions? We'd love to hear from you. Reach out and let's connect.
           </p>
         </div>
+      </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
-          <Card>
-            <CardHeader>
-              <Mail className="h-8 w-8 mb-2 text-primary" />
-              <CardTitle>Email Us</CardTitle>
-              <CardDescription>
-                Send us an email and we'll respond within 24 hours
-              </CardDescription>
-            </CardHeader>
-          </Card>
+      {/* Content Section */}
+      <div className="relative px-4 py-12">
+        <div className="container mx-auto max-w-4xl">
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <Card className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-red-500/50 transition-all duration-300">
+              <CardHeader>
+                <Mail className="h-8 w-8 mb-2 text-red-500" />
+                <CardTitle className="text-white">Email Us</CardTitle>
+                <CardDescription className="text-white/60">
+                  Send us an email and we'll respond within 24 hours
+                </CardDescription>
+              </CardHeader>
+            </Card>
 
-          <Card>
+            <Card className="bg-white/5 border-white/10 backdrop-blur-sm hover:border-cyan-400/50 transition-all duration-300">
+              <CardHeader>
+                <MessageSquare className="h-8 w-8 mb-2 text-cyan-400" />
+                <CardTitle className="text-white">General Inquiries</CardTitle>
+                <CardDescription className="text-white/60">
+                  Questions about partnerships, sponsorships, or media requests
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+
+          <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardHeader>
-              <MessageSquare className="h-8 w-8 mb-2 text-primary" />
-              <CardTitle>General Inquiries</CardTitle>
-              <CardDescription>
-                Questions about partnerships, sponsorships, or media requests
-              </CardDescription>
+              <CardTitle className="text-white">Send us a message</CardTitle>
+              <CardDescription className="text-white/60">Fill out the form below and we'll get back to you soon</CardDescription>
             </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-white">Name *</Label>
+                    <Input
+                      id="name"
+                      placeholder="Your name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      required
+                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40 focus:border-cyan-400"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-white">Email *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="your@email.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      required
+                      className="bg-white/5 border-white/20 text-white placeholder:text-white/40 focus:border-cyan-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="subject" className="text-white">Subject *</Label>
+                  <Input
+                    id="subject"
+                    placeholder="What is this about?"
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    required
+                    className="bg-white/5 border-white/20 text-white placeholder:text-white/40 focus:border-cyan-400"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="message" className="text-white">Message *</Label>
+                  <Textarea
+                    id="message"
+                    placeholder="Your message..."
+                    rows={6}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    required
+                    className="bg-white/5 border-white/20 text-white placeholder:text-white/40 focus:border-cyan-400"
+                  />
+                </div>
+
+                <Button 
+                  type="submit" 
+                  className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold shadow-lg shadow-red-500/30 transition-all duration-300 hover:shadow-red-500/50" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    "Sending..."
+                  ) : (
+                    <>
+                      <Send className="mr-2 h-4 w-4" />
+                      Send Message
+                    </>
+                  )}
+                </Button>
+              </form>
+            </CardContent>
           </Card>
         </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Send us a message</CardTitle>
-            <CardDescription>Fill out the form below and we'll get back to you soon</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Name *</Label>
-                  <Input
-                    id="name"
-                    placeholder="Your name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email *</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="subject">Subject *</Label>
-                <Input
-                  id="subject"
-                  placeholder="What is this about?"
-                  value={formData.subject}
-                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="message">Message *</Label>
-                <Textarea
-                  id="message"
-                  placeholder="Your message..."
-                  rows={6}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  required
-                />
-              </div>
-
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
-                  "Sending..."
-                ) : (
-                  <>
-                    <Send className="mr-2 h-4 w-4" />
-                    Send Message
-                  </>
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

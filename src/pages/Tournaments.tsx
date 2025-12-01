@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search } from "lucide-react";
+import { Search, Trophy, Users, Calendar } from "lucide-react";
+import esportsArena from "@/assets/esports-arena.jpg";
 
 interface Tournament {
   id: string;
@@ -64,23 +64,55 @@ const Tournaments = () => {
 
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden bg-background">
-      {/* Animated Background Effects */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
-        <div className="absolute -top-64 -left-64 w-[40rem] h-[40rem] bg-red-500/20 rounded-full blur-3xl animate-[spin_20s_linear_infinite]"></div>
-        <div className="absolute -bottom-64 -right-64 w-[40rem] h-[40rem] bg-cyan-400/20 rounded-full blur-3xl animate-[spin_25s_linear_infinite_reverse]"></div>
+      {/* Hero Section with Background Image */}
+      <div className="relative h-[50vh] min-h-[400px] w-full">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${esportsArena})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-cyan-500/10" />
+        
+        {/* Animated overlay effects */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-32 -left-32 w-96 h-96 bg-red-500/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
+        </div>
+        
+        {/* Hero Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full pt-20 px-4">
+          <div className="flex items-center gap-3 mb-4">
+            <Trophy className="h-8 w-8 text-red-500" />
+            <span className="text-red-500 uppercase tracking-[0.3em] text-sm font-semibold">Competitive Gaming</span>
+          </div>
+          <h1 className="text-5xl sm:text-7xl font-bold text-white uppercase tracking-widest text-center font-orbitron">
+            Tournaments
+          </h1>
+          <p className="mt-4 text-white/70 text-lg text-center max-w-2xl">
+            Battlegrounds of the elite. Prove your skills and claim glory in our competitive events.
+          </p>
+          
+          {/* Stats */}
+          <div className="flex gap-8 mt-8">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-cyan-400">{tournaments.length}</div>
+              <div className="text-white/50 text-sm uppercase tracking-wider">Events</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-red-500">{games.length}</div>
+              <div className="text-white/50 text-sm uppercase tracking-wider">Games</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-white">$50K+</div>
+              <div className="text-white/50 text-sm uppercase tracking-wider">Prize Pools</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="relative z-10 pt-24 pb-10">
+      <div className="relative z-10 pb-10">
         <main className="flex-1 px-4 sm:px-6 lg:px-16 py-10">
           <div className="max-w-7xl mx-auto">
-            {/* Page Title */}
-            <div className="text-center mb-12">
-              <h1 className="text-5xl sm:text-6xl font-bold text-white uppercase tracking-widest relative inline-block font-orbitron">
-                Tournaments
-                <span className="absolute -top-2 -left-4 text-7xl text-red-500/20 -z-10 font-black">EVENTS</span>
-              </h1>
-              <p className="mt-4 text-white/60 text-lg">Battlegrounds of the elite. Find your next challenge.</p>
-            </div>
 
             {/* Filters */}
             <div className="flex flex-col md:flex-row gap-4 mb-8 max-w-4xl mx-auto">
